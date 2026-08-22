@@ -1,0 +1,7 @@
+﻿services:
+  settlr-foundry:
+    image: ghcr.io/foundry-rs/foundry:latest
+    entrypoint: ["forge"]
+    volumes:
+      - ./contracts:/contracts
+    working_dir: /contracts
