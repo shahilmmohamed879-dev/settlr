@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../../typechain-types/kleros-v1/index.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,KAAK,UAAU,MAAM,cAAc,CAAC;AAChD,YAAY,EAAE,UAAU,EAAE,CAAC;AAC3B,OAAO,KAAK,KAAK,YAAY,MAAM,iBAAiB,CAAC;AACrD,YAAY,EAAE,YAAY,EAAE,CAAC;AAC7B,OAAO,KAAK,KAAK,gBAAgB,MAAM,sBAAsB,CAAC;AAC9D,YAAY,EAAE,gBAAgB,EAAE,CAAC"}

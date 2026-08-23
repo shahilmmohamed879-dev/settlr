@@ -1,0 +1,2 @@
+export * as klerosLiquidToV2GovernorSol from "./KlerosLiquidToV2Governor.sol/index.js";
+//# sourceMappingURL=index.d.ts.map

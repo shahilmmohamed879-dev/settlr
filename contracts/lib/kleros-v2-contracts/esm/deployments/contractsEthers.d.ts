@@ -1,0 +1,21 @@
+import { ethers } from "ethers";
+import { KlerosCore, SortitionModule, DisputeKitClassic, DisputeKitShutter, DisputeKitGated, DisputeKitGatedShutter, DisputeResolver, DisputeTemplateRegistry, EvidenceModule, PolicyRegistry, TransactionBatcher, ChainlinkRNG, RandomizerRNG, BlockHashRNG, PNK, KlerosCoreSnapshotProxy, KlerosCoreUniversity, SortitionModuleUniversity, KlerosCoreNeo, SortitionModuleNeo } from "../typechain-types";
+import { type DeploymentName } from "./utils";
+export declare const getContracts: (provider: ethers.Provider, deployment: DeploymentName) => Promise<{
+    disputeKitClassic: DisputeKitClassic;
+    disputeKitShutter: DisputeKitShutter | null;
+    disputeKitGated: DisputeKitGated | null;
+    disputeKitGatedShutter: DisputeKitGatedShutter | null;
+    disputeResolver: DisputeResolver;
+    disputeTemplateRegistry: DisputeTemplateRegistry;
+    evidence: EvidenceModule;
+    policyRegistry: PolicyRegistry;
+    transactionBatcher: TransactionBatcher;
+    chainlinkRng: ChainlinkRNG | null;
+    randomizerRng: RandomizerRNG | null;
+    blockHashRng: BlockHashRNG;
+    pnk: PNK;
+    klerosCoreSnapshotProxy: KlerosCoreSnapshotProxy;
+    klerosCore: KlerosCoreUniversity | KlerosCore | KlerosCoreNeo;
+    sortition: SortitionModuleUniversity | SortitionModule | SortitionModuleNeo;
+}>;

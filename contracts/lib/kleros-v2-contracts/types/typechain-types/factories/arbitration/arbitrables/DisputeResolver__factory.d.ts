@@ -1,0 +1,247 @@
+import { ContractFactory, ContractTransactionResponse } from "ethers";
+import type { Signer, AddressLike, ContractDeployTransaction, ContractRunner } from "ethers";
+import type { NonPayableOverrides } from "../../../common.js";
+import type { DisputeResolver, DisputeResolverInterface } from "../../../arbitration/arbitrables/DisputeResolver.js";
+type DisputeResolverConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+export declare class DisputeResolver__factory extends ContractFactory {
+    constructor(...args: DisputeResolverConstructorParams);
+    getDeployTransaction(_arbitrator: AddressLike, _templateRegistry: AddressLike, overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<ContractDeployTransaction>;
+    deploy(_arbitrator: AddressLike, _templateRegistry: AddressLike, overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<DisputeResolver & {
+        deploymentTransaction(): ContractTransactionResponse;
+    }>;
+    connect(runner: ContractRunner | null): DisputeResolver__factory;
+    static readonly bytecode = "0x6080604052348015600f57600080fd5b50604051610edf380380610edf833981016040819052602c91607e565b600080546001600160a01b03199081163317909155600180546001600160a01b039485169083161790556002805492909316911617905560b3565b6001600160a01b0381168114607b57600080fd5b50565b60008060408385031215609057600080fd5b82516099816067565b602084015190925060a8816067565b809150509250929050565b610e1d806100c26000396000f3fe60806040526004361061009c5760003560e01c8063908bb29511610064578063908bb29514610170578063a0af81f014610191578063dc653511146101b1578063e09997d9146101c4578063e4c0aaf4146101f1578063fc548f081461021157600080fd5b80630c340a24146100a1578063311a6c56146100de5780634660ebbe14610100578063564a565d146101205780636cc6cde114610150575b600080fd5b3480156100ad57600080fd5b506000546100c1906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b3480156100ea57600080fd5b506100fe6100f93660046108bb565b610231565b005b34801561010c57600080fd5b506100fe61011b3660046108f5565b6103d1565b34801561012c57600080fd5b5061014061013b366004610919565b61041d565b6040516100d59493929190610978565b34801561015c57600080fd5b506001546100c1906001600160a01b031681565b61018361017e3660046109ef565b6104eb565b6040519081526020016100d5565b34801561019d57600080fd5b506002546100c1906001600160a01b031681565b6101836101bf366004610a7c565b61055a565b3480156101d057600080fd5b506101836101df366004610919565b60046020526000908152604090205481565b3480156101fd57600080fd5b506100fe61020c3660046108f5565b6105b9565b34801561021d57600080fd5b506100fe61022c3660046108f5565b610605565b600082815260046020526040812054600380549192918390811061025757610257610b9e565b6000918252602090912060015460049092020191506001600160a01b031633146102d65760405162461bcd60e51b815260206004820152602560248201527f4f6e6c79207468652061726269747261746f722063616e2065786563757465206044820152643a3434b99760d91b60648201526084015b60405180910390fd5b806003015483111561031c5760405162461bcd60e51b815260206004820152600f60248201526e24b73b30b634b210393ab634b7339760891b60448201526064016102cd565b600181015460ff161561037d5760405162461bcd60e51b8152602060048201526024808201527f54686973206469737075746520686173206265656e2072756c656420616c726560448201526330b23c9760e11b60648201526084016102cd565b6001818101805460ff1916909117905560028101839055604051838152849033907f394027a5fa6e098a1191094d1719d6929b9abc535fcc0c8f448d6a4e756222769060200160405180910390a350505050565b6000546001600160a01b031633146103fb5760405162461bcd60e51b81526004016102cd90610bb4565b600280546001600160a01b0319166001600160a01b0392909216919091179055565b6003818154811061042d57600080fd5b906000526020600020906004020160009150905080600001805461045090610bf6565b80601f016020809104026020016040519081016040528092919081815260200182805461047c90610bf6565b80156104c95780601f1061049e576101008083540402835291602001916104c9565b820191906000526020600020905b8154815290600101906020018083116104ac57829003601f168201915b5050505060018301546002840154600390940154929360ff9091169290915084565b60006105508686604051806020016040528060008152506040518060200160405280600081525088888080601f0160208091040260200160405190810160405280939291908181526020018383808284376000920191909152508a9250610651915050565b9695505050505050565b60006105ae878787878080601f016020809104026020016040519081016040528093929190818152602001838380828437600092018290525060408051602081019091529081528a93509150889050610651565b979650505050505050565b6000546001600160a01b031633146105e35760405162461bcd60e51b81526004016102cd90610bb4565b600080546001600160a01b0319166001600160a01b0392909216919091179055565b6000546001600160a01b0316331461062f5760405162461bcd60e51b81526004016102cd90610bb4565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b6000600182116106af5760405162461bcd60e51b8152602060048201526024808201527f53686f756c64206265206174206c6561737420322072756c696e67206f70746960448201526337b7399760e11b60648201526084016102cd565b60015460405163c13517e160e01b81526001600160a01b039091169063c13517e19034906106e59086908c908c90600401610c30565b60206040518083038185885af1158015610703573d6000803e3d6000fd5b50505050506040513d601f19601f820116820180604052508101906107289190610c66565b600380546040805160a06020601f8d018190040282018101909252608081018b8152949550919382918c908c90819085018382808284376000920182905250938552505050602080830182905260408301829052606090920187905283546001810185559381522081519192600402019081906107a59082610cce565b5060208281015160018301805460ff19169115159190911790556040808401516002808501919091556060909401516003909301929092556000858152600491829052828120859055925491516312a6505d60e21b81526001600160a01b0390921691634a9941749161081c918b918b9101610d8c565b6020604051808303816000875af115801561083b573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061085f9190610c66565b60015460405191925084916001600160a01b03909116907f8bd32f430ff060e6bd204709b3790c9807987263d3230c580dc80b5f89e27186906108a790869086908b90610dc8565b60405180910390a350509695505050505050565b600080604083850312156108ce57600080fd5b50508035926020909101359150565b6001600160a01b03811681146108f257600080fd5b50565b60006020828403121561090757600080fd5b8135610912816108dd565b9392505050565b60006020828403121561092b57600080fd5b5035919050565b6000815180845260005b818110156109585760208185018101518683018201520161093c565b506000602082860101526020601f19601f83011685010191505092915050565b60808152600061098b6080830187610932565b9415156020830152506040810192909252606090910152919050565b60008083601f8401126109b957600080fd5b5081356001600160401b038111156109d057600080fd5b6020830191508360208285010111156109e857600080fd5b9250929050565b600080600080600060608688031215610a0757600080fd5b85356001600160401b03811115610a1d57600080fd5b610a29888289016109a7565b90965094505060208601356001600160401b03811115610a4857600080fd5b610a54888289016109a7565b96999598509660400135949350505050565b634e487b7160e01b600052604160045260246000fd5b60008060008060008060808789031215610a9557600080fd5b86356001600160401b03811115610aab57600080fd5b610ab789828a016109a7565b90975095505060208701356001600160401b03811115610ad657600080fd5b610ae289828a016109a7565b90955093505060408701356001600160401b03811115610b0157600080fd5b8701601f81018913610b1257600080fd5b80356001600160401b03811115610b2b57610b2b610a66565b604051601f8201601f19908116603f011681016001600160401b0381118282101715610b5957610b59610a66565b6040528181528282016020018b1015610b7157600080fd5b81602084016020830137600091810160200191909152969995985093969295946060939093013593505050565b634e487b7160e01b600052603260045260246000fd5b60208082526022908201527f416363657373206e6f7420616c6c6f7765643a20476f7665726e6f72206f6e6c6040820152613c9760f11b606082015260800190565b600181811c90821680610c0a57607f821691505b602082108103610c2a57634e487b7160e01b600052602260045260246000fd5b50919050565b83815260406020820152816040820152818360608301376000818301606090810191909152601f909201601f1916010192915050565b600060208284031215610c7857600080fd5b5051919050565b601f821115610cc957806000526020600020601f840160051c81016020851015610ca65750805b601f840160051c820191505b81811015610cc65760008155600101610cb2565b50505b505050565b81516001600160401b03811115610ce757610ce7610a66565b610cfb81610cf58454610bf6565b84610c7f565b6020601f821160018114610d2f5760008315610d175750848201515b600019600385901b1c1916600184901b178455610cc6565b600084815260208120601f198516915b82811015610d5f5787850151825560209485019460019092019101610d3f565b5084821015610d7d5786840151600019600387901b60f8161c191681555b50505050600190811b01905550565b6060815260006060820152608060208201526000610dad6080830185610932565b8281036040840152610dbf8185610932565b95945050505050565b838152826020820152606060408201526000610dbf606083018461093256fea26469706673582212209d7f235af5f24d70d0fca9b3c43f6941ec8835b79fc59f659ae115d8e25c1cb764736f6c634300081c0033";
+    static readonly abi: readonly [{
+        readonly inputs: readonly [{
+            readonly internalType: "contract IArbitratorV2";
+            readonly name: "_arbitrator";
+            readonly type: "address";
+        }, {
+            readonly internalType: "contract IDisputeTemplateRegistry";
+            readonly name: "_templateRegistry";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "contract IArbitratorV2";
+            readonly name: "_arbitrator";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "_arbitratorDisputeID";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_externalDisputeID";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_templateId";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "string";
+            readonly name: "_templateUri";
+            readonly type: "string";
+        }];
+        readonly name: "DisputeRequest";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "contract IArbitratorV2";
+            readonly name: "_arbitrator";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "_disputeID";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_ruling";
+            readonly type: "uint256";
+        }];
+        readonly name: "Ruling";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "arbitrator";
+        readonly outputs: readonly [{
+            readonly internalType: "contract IArbitratorV2";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly name: "arbitratorDisputeIDToLocalID";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "contract IArbitratorV2";
+            readonly name: "_arbitrator";
+            readonly type: "address";
+        }];
+        readonly name: "changeArbitrator";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }];
+        readonly name: "changeGovernor";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "contract IDisputeTemplateRegistry";
+            readonly name: "_templateRegistry";
+            readonly type: "address";
+        }];
+        readonly name: "changeTemplateRegistry";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes";
+            readonly name: "_arbitratorExtraData";
+            readonly type: "bytes";
+        }, {
+            readonly internalType: "string";
+            readonly name: "_disputeTemplate";
+            readonly type: "string";
+        }, {
+            readonly internalType: "string";
+            readonly name: "_disputeTemplateDataMappings";
+            readonly type: "string";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_numberOfRulingOptions";
+            readonly type: "uint256";
+        }];
+        readonly name: "createDisputeForTemplate";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "disputeID";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes";
+            readonly name: "_arbitratorExtraData";
+            readonly type: "bytes";
+        }, {
+            readonly internalType: "string";
+            readonly name: "_disputeTemplateUri";
+            readonly type: "string";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_numberOfRulingOptions";
+            readonly type: "uint256";
+        }];
+        readonly name: "createDisputeForTemplateUri";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "disputeID";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly name: "disputes";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes";
+            readonly name: "arbitratorExtraData";
+            readonly type: "bytes";
+        }, {
+            readonly internalType: "bool";
+            readonly name: "isRuled";
+            readonly type: "bool";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "ruling";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "numberOfRulingOptions";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "governor";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "_arbitratorDisputeID";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_ruling";
+            readonly type: "uint256";
+        }];
+        readonly name: "rule";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "templateRegistry";
+        readonly outputs: readonly [{
+            readonly internalType: "contract IDisputeTemplateRegistry";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }];
+    static createInterface(): DisputeResolverInterface;
+    static connect(address: string, runner?: ContractRunner | null): DisputeResolver;
+}
+export {};
+//# sourceMappingURL=DisputeResolver__factory.d.ts.map

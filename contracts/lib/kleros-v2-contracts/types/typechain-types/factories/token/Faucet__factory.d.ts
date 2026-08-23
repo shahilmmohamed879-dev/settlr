@@ -1,0 +1,117 @@
+import { ContractFactory, ContractTransactionResponse } from "ethers";
+import type { Signer, AddressLike, ContractDeployTransaction, ContractRunner } from "ethers";
+import type { NonPayableOverrides } from "../../common.js";
+import type { Faucet, FaucetInterface } from "../../token/Faucet.js";
+type FaucetConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+export declare class Faucet__factory extends ContractFactory {
+    constructor(...args: FaucetConstructorParams);
+    getDeployTransaction(_token: AddressLike, overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<ContractDeployTransaction>;
+    deploy(_token: AddressLike, overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<Faucet & {
+        deploymentTransaction(): ContractTransactionResponse;
+    }>;
+    connect(runner: ContractRunner | null): Faucet__factory;
+    static readonly bytecode = "0x608060405269021e19e0c9bab2400000600355348015601d57600080fd5b5060405161064f38038061064f833981016040819052603a916067565b600080546001600160a01b039092166001600160a01b031992831617905560018054909116331790556095565b600060208284031215607857600080fd5b81516001600160a01b0381168114608e57600080fd5b9392505050565b6105ab806100a46000396000f3fe608060405234801561001057600080fd5b50600436106100835760003560e01c80630c340a2414610088578063338cdca1146100b15780633ccfd60b146100bb5780635c320516146100c3578063aa8c217c146100d6578063b69ef8a8146100ed578063d61c40dc146100f5578063e4c0aaf414610128578063fc0c546a1461013b575b600080fd5b60015461009b906001600160a01b031681565b6040516100a8919061049b565b60405180910390f35b6100b961014e565b005b6100b961028f565b6100b96100d13660046104af565b6103a9565b6100df60035481565b6040519081526020016100a8565b6100df6103d8565b6101186101033660046104c8565b60026020526000908152604090205460ff1681565b60405190151581526020016100a8565b6100b96101363660046104c8565b61044f565b60005461009b906001600160a01b031681565b3360009081526002602052604090205460ff16156101f95760405162461bcd60e51b815260206004820152605760248201527f596f752068617665207573656420746869732066617563657420616c7265616460448201527f792e20496620796f75206e656564206d6f726520746f6b656e732c20706c656160648201527639b2903ab9b29030b737ba3432b91030b2323932b9b99760491b608482015260a4015b60405180910390fd5b60005460035460405163a9059cbb60e01b815233600482015260248101919091526001600160a01b039091169063a9059cbb906044016020604051808303816000875af115801561024e573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061027291906104f8565b50336000908152600260205260409020805460ff19166001179055565b6001546001600160a01b031633146102b95760405162461bcd60e51b81526004016101f09061051a565b6000546001546040516370a0823160e01b81526001600160a01b039283169263a9059cbb92169083906370a08231906102f690309060040161049b565b602060405180830381865afa158015610313573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610337919061055c565b6040516001600160e01b031960e085901b1681526001600160a01b03909216600483015260248201526044016020604051808303816000875af1158015610382573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906103a691906104f8565b50565b6001546001600160a01b031633146103d35760405162461bcd60e51b81526004016101f09061051a565b600355565b600080546040516370a0823160e01b81526001600160a01b03909116906370a082319061040990309060040161049b565b602060405180830381865afa158015610426573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061044a919061055c565b905090565b6001546001600160a01b031633146104795760405162461bcd60e51b81526004016101f09061051a565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b6001600160a01b0391909116815260200190565b6000602082840312156104c157600080fd5b5035919050565b6000602082840312156104da57600080fd5b81356001600160a01b03811681146104f157600080fd5b9392505050565b60006020828403121561050a57600080fd5b815180151581146104f157600080fd5b60208082526022908201527f416363657373206e6f7420616c6c6f7765643a20476f7665726e6f72206f6e6c6040820152613c9760f11b606082015260800190565b60006020828403121561056e57600080fd5b505191905056fea2646970667358221220a601ce0bd4a8da6ee36bc4ce781072cb059b8ec2eb42f49c079aa666ccd1d99464736f6c634300081c0033";
+    static readonly abi: readonly [{
+        readonly inputs: readonly [{
+            readonly internalType: "contract IERC20";
+            readonly name: "_token";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "amount";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "balance";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "_amount";
+            readonly type: "uint256";
+        }];
+        readonly name: "changeAmount";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }];
+        readonly name: "changeGovernor";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "governor";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "request";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "token";
+        readonly outputs: readonly [{
+            readonly internalType: "contract IERC20";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "withdraw";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly name: "withdrewAlready";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }];
+    static createInterface(): FaucetInterface;
+    static connect(address: string, runner?: ContractRunner | null): Faucet;
+}
+export {};
+//# sourceMappingURL=Faucet__factory.d.ts.map

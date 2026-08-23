@@ -1,0 +1,542 @@
+import { ContractFactory, ContractTransactionResponse } from "ethers";
+import type { Signer, ContractDeployTransaction, ContractRunner } from "ethers";
+import type { NonPayableOverrides } from "../../../common.js";
+import type { SortitionModuleUniversity, SortitionModuleUniversityInterface } from "../../../arbitration/university/SortitionModuleUniversity.js";
+type SortitionModuleUniversityConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+export declare class SortitionModuleUniversity__factory extends ContractFactory {
+    constructor(...args: SortitionModuleUniversityConstructorParams);
+    getDeployTransaction(overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<ContractDeployTransaction>;
+    deploy(overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<SortitionModuleUniversity & {
+        deploymentTransaction(): ContractTransactionResponse;
+    }>;
+    connect(runner: ContractRunner | null): SortitionModuleUniversity__factory;
+    static readonly bytecode = "0x60a06040523060805234801561001457600080fd5b5061001d610022565b6100d3565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0e805468010000000000000000900460ff16156100715760405162dc149f60e41b815260040160405180910390fd5b80546001600160401b03908116146100d05780546001600160401b0319166001600160401b0390811782556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a15b50565b608051611aa66100fc60003960008181610819015281816108420152610a3a0152611aa66000f3fe6080604052600436106101565760003560e01c80635d2d7846116100c1578063b5d69e991161007a578063b5d69e9914610416578063d09f392d14610436578063d1c1df4814610456578063dca5f6b014610496578063f1a53104146104e2578063f216de4c14610502578063f2f4eb261461052257600080fd5b80635d2d78461461032b5780636624192f1461034b57806369f4587714610396578063965af6c7146103b65780639fbb56f1146103d6578063aac03ad2146103f657600080fd5b8063485cc95511610113578063485cc9551461024a5780634c70a0d61461026a5780634f1ef2861461029857806352d1902d146102ab578063543f8a36146102c057806354fd4d50146102ed57600080fd5b8063034327441461015b5780630c340a24146101845780631ecacab8146101bc57806321e1625e146101eb57806321ea9b3f1461020d578063477a655c1461022b575b600080fd5b34801561016757600080fd5b5061017160025481565b6040519081526020015b60405180910390f35b34801561019057600080fd5b506000546101a4906001600160a01b031681565b6040516001600160a01b03909116815260200161017b565b3480156101c857600080fd5b506101dc6101d7366004611503565b610542565b60405161017b93929190611544565b3480156101f757600080fd5b5061020b61020636600461157e565b610663565b005b34801561021957600080fd5b5061020b6102283660046115aa565b50565b34801561023757600080fd5b5061020b610246366004611668565b5050565b34801561025657600080fd5b5061020b6102653660046116af565b610706565b34801561027657600080fd5b506101a46102853660046116e8565b50506004546001600160a01b0316919050565b61020b6102a6366004611714565b610805565b3480156102b757600080fd5b50610171610a2d565b3480156102cc57600080fd5b506102e06102db36600461174e565b610a8b565b60405161017b9190611772565b3480156102f957600080fd5b5061031e604051806040016040528060058152602001640302e382e360dc1b81525081565b60405161017b91906117e2565b34801561033757600080fd5b5061020b610346366004611815565b610b2c565b34801561035757600080fd5b5061038661036636600461174e565b6001600160a01b0316600090815260036020526040902060020154151590565b604051901515815260200161017b565b3480156103a257600080fd5b5061020b6103b136600461174e565b610b6f565b3480156103c257600080fd5b5061020b6103d136600461157e565b610c85565b3480156103e257600080fd5b506101716103f136600461174e565b610d20565b34801561040257600080fd5b5061020b610411366004611837565b610d64565b34801561042257600080fd5b5061020b61043136600461174e565b61110a565b34801561044257600080fd5b5061020b610451366004611815565b611209565b34801561046257600080fd5b50610476610471366004611888565b611243565b60408051948552602085019390935291830152606082015260800161017b565b3480156104a257600080fd5b506104cd6104b136600461174e565b6003602081905260009182526040909120600281015491015482565b6040805192835260208301919091520161017b565b3480156104ee57600080fd5b5061020b6104fd36600461174e565b6112f9565b34801561050e57600080fd5b506104cd61051d36600461157e565b611345565b34801561052e57600080fd5b506001546101a4906001600160a01b031681565b600154600090819081906001600160a01b0316331461057c5760405162461bcd60e51b8152600401610573906118b6565b60405180910390fd5b6001600160a01b03861660009081526003602052604081209061059f88886113d3565b6001830154909150811580156105b6575060048110155b156105ce57600080600495509550955050505061065a565b811580156105da575086155b156105f257600080600995509550955050505061065a565b81871061060a576106038288611910565b9550610652565b6106148783611910565b94506000836003015484600201541161062e576000610642565b836003015484600201546106429190611910565b905080861115610650578095505b505b506000925050505b93509350939050565b6001546001600160a01b0316331461068d5760405162461bcd60e51b8152600401610573906118b6565b6001600160a01b038216600090815260036020819052604082200180548392906106b8908490611929565b909155505060408051828152600060208201526001600160a01b038416917f7a81a4ef419d50dbb5deb116fb983bf6ca7716bcbc84cd1cd2be81ccea9078b091015b60405180910390a25050565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0e805460019190600160401b900460ff16806107505750805467ffffffffffffffff808416911610155b1561076d5760405162dc149f60e41b815260040160405180910390fd5b805468ffffffffffffffffff191667ffffffffffffffff8316908117600160401b178255600080546001600160a01b038781166001600160a01b0319928316179092556001805492871692909116919091179055815460ff60401b191682556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a150505050565b61080e82611474565b306001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016148061088c57507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316610880600080516020611a518339815191525490565b6001600160a01b031614155b156108aa5760405163703e46dd60e11b815260040160405180910390fd5b816001600160a01b03166352d1902d6040518163ffffffff1660e01b8152600401602060405180830381865afa925050508015610904575060408051601f3d908101601f191682019092526109019181019061193c565b60015b61092c57604051630c76093760e01b81526001600160a01b0383166004820152602401610573565b600080516020611a51833981519152811461095d57604051632a87526960e21b815260048101829052602401610573565b600080516020611a518339815191528390556040516001600160a01b038416907fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b90600090a2815115610a28576000836001600160a01b0316836040516109c49190611955565b600060405180830381855af49150503d80600081146109ff576040519150601f19603f3d011682016040523d82523d6000602084013e610a04565b606091505b5050905080610a26576040516339b21b5d60e11b815260040160405180910390fd5b505b505050565b6000306001600160a01b037f00000000000000000000000000000000000000000000000000000000000000001614610a785760405163703e46dd60e11b815260040160405180910390fd5b50600080516020611a5183398151915290565b6001600160a01b038116600090815260036020908152604091829020600101805483518184028101840190945280845260609392830182828015610b2057602002820191906000526020600020906000905b82829054906101000a90046001600160601b03166001600160601b0316815260200190600c0190602082600b01049283019260010382029150808411610add5790505b50505050509050919050565b6001546001600160a01b03163314610b565760405162461bcd60e51b8152600401610573906118b6565b60028054906000610b6683611971565b91905055505050565b6000610b7a82610d20565b905060008111610bcc5760405162461bcd60e51b815260206004820152601c60248201527f4e6f7420656c696769626c6520666f72207769746864726177616c2e000000006044820152606401610573565b6001600160a01b038281166000818152600360205260408082206002019190915560015490516342c37fa360e01b8152600481019290925260248201849052909116906342c37fa390604401600060405180830381600087803b158015610c3257600080fd5b505af1158015610c46573d6000803e3d6000fd5b50505050816001600160a01b03167f71bb1b604559acc3db697ccf2aa4228d727cd5b133d6ffa419518d51c117c95c826040516106fa91815260200190565b6001546001600160a01b03163314610caf5760405162461bcd60e51b8152600401610573906118b6565b6001600160a01b03821660009081526003602081905260408220018054839290610cda908490611910565b909155505060408051828152600160208201526001600160a01b038416917f7a81a4ef419d50dbb5deb116fb983bf6ca7716bcbc84cd1cd2be81ccea9078b091016106fa565b6001600160a01b03811660009081526003602052604081206001810154158015610d4c57506003810154155b15610d5b576002015492915050565b50600092915050565b6001546001600160a01b03163314610d8e5760405162461bcd60e51b8152600401610573906118b6565b6001600160a01b038516600090815260036020526040812090610db187876113d3565b90508415610e1f5780600003610e0057600182810180548083018255600091825260209091206002820401805491909216600c026101000a6001600160601b0381810219909216918916021790555b84826002016000828254610e149190611929565b90915550610fa29050565b83826002016000828254610e339190611910565b90915550506000839003610fa25760018201545b8015610fa057866001600160601b031683600101600183610e689190611910565b81548110610e7857610e78611988565b600091825260209091206002820401546001909116600c026101000a90046001600160601b031603610f8e57600180840180549091610eb691611910565b81548110610ec657610ec6611988565b600091825260209091206002820401546001918216600c026101000a90046001600160601b03169084810190610efc9084611910565b81548110610f0c57610f0c611988565b9060005260206000209060029182820401919006600c026101000a8154816001600160601b0302191690836001600160601b0316021790555082600101805480610f5857610f5861199e565b60008281526020902060026000199092019182040180546001600160601b03600c60018516026101000a02191690559055610fa0565b80610f9881611971565b915050610e47565b505b6000865b816110a4576001600160601b03811660009081526020859052604081208054879290610fd3908490611929565b90915550506001600160601b03811660009081526020859052604081208054859290611000908490611910565b90915550506000196001600160601b038216016110205760019150610fa6565b600154604051630fad06e960e11b81526001600160601b03831660048201526001600160a01b0390911690631f5a0dd29060240160e060405180830381865afa158015611071573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061109591906119c9565b50949550610fa6945050505050565b6002840154604080516001600160601b038b16815260208101889052908101919091526001600160a01b038a16907f70ca4ec64687bf265f39041896f3dbf10b9f650503cb38f2b3569fdce7489c369060600160405180910390a2505050505050505050565b6001546001600160a01b031633146111345760405162461bcd60e51b8152600401610573906118b6565b600061113f82610a8b565b80519091505b8015610a2857600180546001600160a01b031690630761c14d908590859061116d9086611910565b8151811061117d5761117d611988565b60209081029190910101516040516001600160e01b031960e085901b1681526001600160a01b0390921660048301526001600160601b0316602482015260006044820152606401600060405180830381600087803b1580156111de57600080fd5b505af11580156111f2573d6000803e3d6000fd5b50505050808061120190611971565b915050611145565b6001546001600160a01b031633146112335760405162461bcd60e51b8152600401610573906118b6565b60028054906000610b6683611a37565b6001600160a01b038216600090815260036020819052604082206002810154918101546001820154929390929091825b828110156112ee57866001600160601b031682600101828154811061129a5761129a611988565b600091825260209091206002820401546001909116600c026101000a90046001600160601b0316036112e6576001600160601b03871660009081526020839052604090205493506112ee565b600101611273565b505092959194509250565b6001546001600160a01b031633146113235760405162461bcd60e51b8152600401610573906118b6565b600480546001600160a01b0319166001600160a01b0392909216919091179055565b60015460009081906001600160a01b031633146113745760405162461bcd60e51b8152600401610573906118b6565b6001600160a01b038416600090815260036020526040902060028101548481106113ba57849250848260020160008282546113af9190611910565b909155506113c59050565b600060028301559150815b506002015491509250929050565b6001600160a01b0382166000908152600360205260408120815b600182015481101561146c57836001600160601b031682600101828154811061141857611418611988565b600091825260209091206002820401546001909116600c026101000a90046001600160601b031603611464576001600160601b038416600090815260208390526040902054925061146c565b6001016113ed565b505092915050565b6000546001600160a01b031633146102285760405162461bcd60e51b815260206004820152602260248201527f416363657373206e6f7420616c6c6f7765643a20476f7665726e6f72206f6e6c6044820152613c9760f11b6064820152608401610573565b6001600160a01b038116811461022857600080fd5b6001600160601b038116811461022857600080fd5b60008060006060848603121561151857600080fd5b8335611523816114d9565b92506020840135611533816114ee565b929592945050506040919091013590565b8381526020810183905260608101600a831061157057634e487b7160e01b600052602160045260246000fd5b826040830152949350505050565b6000806040838503121561159157600080fd5b823561159c816114d9565b946020939093013593505050565b6000602082840312156115bc57600080fd5b5035919050565b634e487b7160e01b600052604160045260246000fd5b600082601f8301126115ea57600080fd5b813567ffffffffffffffff811115611604576116046115c3565b604051601f8201601f19908116603f0116810167ffffffffffffffff81118282101715611633576116336115c3565b60405281815283820160200185101561164b57600080fd5b816020850160208301376000918101602001919091529392505050565b6000806040838503121561167b57600080fd5b82359150602083013567ffffffffffffffff81111561169957600080fd5b6116a5858286016115d9565b9150509250929050565b600080604083850312156116c257600080fd5b82356116cd816114d9565b915060208301356116dd816114d9565b809150509250929050565b6000806000606084860312156116fd57600080fd5b505081359360208301359350604090920135919050565b6000806040838503121561172757600080fd5b8235611732816114d9565b9150602083013567ffffffffffffffff81111561169957600080fd5b60006020828403121561176057600080fd5b813561176b816114d9565b9392505050565b602080825282518282018190526000918401906040840190835b818110156117b35783516001600160601b031683526020938401939092019160010161178c565b509095945050505050565b60005b838110156117d95781810151838201526020016117c1565b50506000910152565b60208152600082518060208401526118018160408501602087016117be565b601f01601f19169190910160400192915050565b6000806040838503121561182857600080fd5b50508035926020909101359150565b600080600080600060a0868803121561184f57600080fd5b853561185a816114d9565b9450602086013561186a816114ee565b94979496505050506040830135926060810135926080909101359150565b6000806040838503121561189b57600080fd5b82356118a6816114d9565b915060208301356116dd816114ee565b60208082526024908201527f416363657373206e6f7420616c6c6f7765643a204b6c65726f73436f7265206f60408201526337363c9760e11b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b81810381811115611923576119236118fa565b92915050565b80820180821115611923576119236118fa565b60006020828403121561194e57600080fd5b5051919050565b600082516119678184602087016117be565b9190910192915050565b600081611980576119806118fa565b506000190190565b634e487b7160e01b600052603260045260246000fd5b634e487b7160e01b600052603160045260246000fd5b805180151581146119c457600080fd5b919050565b600080600080600080600060e0888a0312156119e457600080fd5b87516119ef816114ee565b96506119fd602089016119b4565b604089015160608a015160808b015160a08c0151939950919750955093509150611a2960c089016119b4565b905092959891949750929550565b600060018201611a4957611a496118fa565b506001019056fe360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbca2646970667358221220c3ffb94de00e3441a8159296abd77f81bd61e12d7b6be9ed0f9f5e3efbb252a964736f6c634300081c0033";
+    static readonly abi: readonly [{
+        readonly inputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "AlreadyInitialized";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "FailedDelegateCall";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "implementation";
+            readonly type: "address";
+        }];
+        readonly name: "InvalidImplementation";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "NotInitializing";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "UUPSUnauthorizedCallContext";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "slot";
+            readonly type: "bytes32";
+        }];
+        readonly name: "UUPSUnsupportedProxiableUUID";
+        readonly type: "error";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: false;
+            readonly internalType: "uint64";
+            readonly name: "version";
+            readonly type: "uint64";
+        }];
+        readonly name: "Initialized";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_amount";
+            readonly type: "uint256";
+        }];
+        readonly name: "LeftoverPNK";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_amount";
+            readonly type: "uint256";
+        }];
+        readonly name: "LeftoverPNKWithdrawn";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: false;
+            readonly internalType: "enum ISortitionModule.Phase";
+            readonly name: "_phase";
+            readonly type: "uint8";
+        }];
+        readonly name: "NewPhase";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "_address";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_relativeAmount";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "bool";
+            readonly name: "_unlock";
+            readonly type: "bool";
+        }];
+        readonly name: "StakeLocked";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "_address";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_courtID";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_amount";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "_amountAllCourts";
+            readonly type: "uint256";
+        }];
+        readonly name: "StakeSet";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "newImplementation";
+            readonly type: "address";
+        }];
+        readonly name: "Upgraded";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "core";
+        readonly outputs: readonly [{
+            readonly internalType: "contract KlerosCoreUniversity";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly name: "createDisputeHook";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "_key";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "bytes";
+            readonly name: "_extraData";
+            readonly type: "bytes";
+        }];
+        readonly name: "createTree";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "disputesWithoutJurors";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly name: "draw";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "drawnAddress";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_juror";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint96";
+            readonly name: "_courtID";
+            readonly type: "uint96";
+        }];
+        readonly name: "getJurorBalance";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "totalStaked";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "totalLocked";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "stakedInCourt";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "nbCourts";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_juror";
+            readonly type: "address";
+        }];
+        readonly name: "getJurorCourtIDs";
+        readonly outputs: readonly [{
+            readonly internalType: "uint96[]";
+            readonly name: "";
+            readonly type: "uint96[]";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_juror";
+            readonly type: "address";
+        }];
+        readonly name: "getJurorLeftoverPNK";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "governor";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }, {
+            readonly internalType: "contract KlerosCoreUniversity";
+            readonly name: "_core";
+            readonly type: "address";
+        }];
+        readonly name: "initialize";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_juror";
+            readonly type: "address";
+        }];
+        readonly name: "isJurorStaked";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "jurors";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "stakedPnk";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "lockedPnk";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_relativeAmount";
+            readonly type: "uint256";
+        }];
+        readonly name: "lockStake";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "_randomNumber";
+            readonly type: "uint256";
+        }];
+        readonly name: "notifyRandomNumber";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_relativeAmount";
+            readonly type: "uint256";
+        }];
+        readonly name: "penalizeStake";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "pnkBalance";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "availablePenalty";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly name: "postDrawHook";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "proxiableUUID";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }];
+        readonly name: "setJurorInactive";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint96";
+            readonly name: "_courtID";
+            readonly type: "uint96";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_pnkDeposit";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_pnkWithdrawal";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_newStake";
+            readonly type: "uint256";
+        }];
+        readonly name: "setStake";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_juror";
+            readonly type: "address";
+        }];
+        readonly name: "setTransientJuror";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_relativeAmount";
+            readonly type: "uint256";
+        }];
+        readonly name: "unlockStake";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "newImplementation";
+            readonly type: "address";
+        }, {
+            readonly internalType: "bytes";
+            readonly name: "data";
+            readonly type: "bytes";
+        }];
+        readonly name: "upgradeToAndCall";
+        readonly outputs: readonly [];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint96";
+            readonly name: "_courtID";
+            readonly type: "uint96";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "_newStake";
+            readonly type: "uint256";
+        }];
+        readonly name: "validateStake";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "pnkDeposit";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "pnkWithdrawal";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "enum StakingResult";
+            readonly name: "stakingResult";
+            readonly type: "uint8";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "version";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }];
+        readonly name: "withdrawLeftoverPNK";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }];
+    static createInterface(): SortitionModuleUniversityInterface;
+    static connect(address: string, runner?: ContractRunner | null): SortitionModuleUniversity;
+}
+export {};
+//# sourceMappingURL=SortitionModuleUniversity__factory.d.ts.map

@@ -1,0 +1,261 @@
+import { ContractFactory, ContractTransactionResponse } from "ethers";
+import type { Signer, ContractDeployTransaction, ContractRunner } from "ethers";
+import type { NonPayableOverrides } from "../../common.js";
+import type { PNK, PNKInterface } from "../../token/PNK.js";
+type PNKConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+export declare class PNK__factory extends ContractFactory {
+    constructor(...args: PNKConstructorParams);
+    getDeployTransaction(overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<ContractDeployTransaction>;
+    deploy(overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<PNK & {
+        deploymentTransaction(): ContractTransactionResponse;
+    }>;
+    connect(runner: ContractRunner | null): PNK__factory;
+    static readonly bytecode = "0x608060405234801561001057600080fd5b50604051806040016040528060088152602001672834b730b5b4b7b760c11b81525060405180604001604052806003815260200162504e4b60e81b815250816003908161005d9190610294565b50600461006a8282610294565b5050506100873369d3c21bcecceda100000061008c60201b60201c565b610379565b6001600160a01b0382166100bb5760405163ec442f0560e01b8152600060048201526024015b60405180910390fd5b6100c7600083836100cb565b5050565b6001600160a01b0383166100f65780600260008282546100eb9190610352565b909155506101689050565b6001600160a01b038316600090815260208190526040902054818110156101495760405163391434e360e21b81526001600160a01b038516600482015260248101829052604481018390526064016100b2565b6001600160a01b03841660009081526020819052604090209082900390555b6001600160a01b038216610184576002805482900390556101a3565b6001600160a01b03821660009081526020819052604090208054820190555b816001600160a01b0316836001600160a01b03167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef836040516101e891815260200190565b60405180910390a3505050565b634e487b7160e01b600052604160045260246000fd5b600181811c9082168061021f57607f821691505b60208210810361023f57634e487b7160e01b600052602260045260246000fd5b50919050565b601f82111561028f57806000526020600020601f840160051c8101602085101561026c5750805b601f840160051c820191505b8181101561028c5760008155600101610278565b50505b505050565b81516001600160401b038111156102ad576102ad6101f5565b6102c1816102bb845461020b565b84610245565b6020601f8211600181146102f557600083156102dd5750848201515b600019600385901b1c1916600184901b17845561028c565b600084815260208120601f198516915b828110156103255787850151825560209485019460019092019101610305565b50848210156103435786840151600019600387901b60f8161c191681555b50505050600190811b01905550565b8082018082111561037357634e487b7160e01b600052601160045260246000fd5b92915050565b610712806103886000396000f3fe608060405234801561001057600080fd5b50600436106100835760003560e01c806306fdde0314610088578063095ea7b3146100a657806318160ddd146100c957806323b872dd146100db578063313ce567146100ee57806370a08231146100fd57806395d89b4114610126578063a9059cbb1461012e578063dd62ed3e14610141575b600080fd5b610090610154565b60405161009d9190610526565b60405180910390f35b6100b96100b4366004610590565b6101e6565b604051901515815260200161009d565b6002545b60405190815260200161009d565b6100b96100e93660046105ba565b610200565b6040516012815260200161009d565b6100cd61010b3660046105f7565b6001600160a01b031660009081526020819052604090205490565b610090610224565b6100b961013c366004610590565b610233565b6100cd61014f366004610619565b610241565b6060600380546101639061064c565b80601f016020809104026020016040519081016040528092919081815260200182805461018f9061064c565b80156101dc5780601f106101b1576101008083540402835291602001916101dc565b820191906000526020600020905b8154815290600101906020018083116101bf57829003601f168201915b5050505050905090565b6000336101f481858561026c565b60019150505b92915050565b60003361020e85828561027e565b6102198585856102db565b506001949350505050565b6060600480546101639061064c565b6000336101f48185856102db565b6001600160a01b03918216600090815260016020908152604080832093909416825291909152205490565b610279838383600161033a565b505050565b600061028a8484610241565b90506000198110156102d557818110156102c657828183604051637dc7a0d960e11b81526004016102bd93929190610686565b60405180910390fd5b6102d58484848403600061033a565b50505050565b6001600160a01b038316610305576000604051634b637e8f60e11b81526004016102bd91906106a7565b6001600160a01b03821661032f57600060405163ec442f0560e01b81526004016102bd91906106a7565b61027983838361040f565b6001600160a01b03841661036457600060405163e602df0560e01b81526004016102bd91906106a7565b6001600160a01b03831661038e576000604051634a1406b160e11b81526004016102bd91906106a7565b6001600160a01b03808516600090815260016020908152604080832093871683529290522082905580156102d557826001600160a01b0316846001600160a01b03167f8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b9258460405161040191815260200190565b60405180910390a350505050565b6001600160a01b03831661043a57806002600082825461042f91906106bb565b909155506104999050565b6001600160a01b0383166000908152602081905260409020548181101561047a5783818360405163391434e360e21b81526004016102bd93929190610686565b6001600160a01b03841660009081526020819052604090209082900390555b6001600160a01b0382166104b5576002805482900390556104d4565b6001600160a01b03821660009081526020819052604090208054820190555b816001600160a01b0316836001600160a01b03167fddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef8360405161051991815260200190565b60405180910390a3505050565b602081526000825180602084015260005b818110156105545760208186018101516040868401015201610537565b506000604082850101526040601f19601f83011684010191505092915050565b80356001600160a01b038116811461058b57600080fd5b919050565b600080604083850312156105a357600080fd5b6105ac83610574565b946020939093013593505050565b6000806000606084860312156105cf57600080fd5b6105d884610574565b92506105e660208501610574565b929592945050506040919091013590565b60006020828403121561060957600080fd5b61061282610574565b9392505050565b6000806040838503121561062c57600080fd5b61063583610574565b915061064360208401610574565b90509250929050565b600181811c9082168061066057607f821691505b60208210810361068057634e487b7160e01b600052602260045260246000fd5b50919050565b6001600160a01b039390931683526020830191909152604082015260600190565b6001600160a01b0391909116815260200190565b808201808211156101fa57634e487b7160e01b600052601160045260246000fdfea264697066735822122073143e260a9d5abaaeb4e2af68f536891018925601db7f199da2944f83d83fcd64736f6c634300081c0033";
+    static readonly abi: readonly [{
+        readonly inputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "allowance";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "needed";
+            readonly type: "uint256";
+        }];
+        readonly name: "ERC20InsufficientAllowance";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "sender";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "balance";
+            readonly type: "uint256";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "needed";
+            readonly type: "uint256";
+        }];
+        readonly name: "ERC20InsufficientBalance";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "approver";
+            readonly type: "address";
+        }];
+        readonly name: "ERC20InvalidApprover";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "receiver";
+            readonly type: "address";
+        }];
+        readonly name: "ERC20InvalidReceiver";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "sender";
+            readonly type: "address";
+        }];
+        readonly name: "ERC20InvalidSender";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }];
+        readonly name: "ERC20InvalidSpender";
+        readonly type: "error";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "owner";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "Approval";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "from";
+            readonly type: "address";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "to";
+            readonly type: "address";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "Transfer";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "owner";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }];
+        readonly name: "allowance";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "spender";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "approve";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "account";
+            readonly type: "address";
+        }];
+        readonly name: "balanceOf";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "decimals";
+        readonly outputs: readonly [{
+            readonly internalType: "uint8";
+            readonly name: "";
+            readonly type: "uint8";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "name";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "symbol";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "totalSupply";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "to";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "transfer";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "from";
+            readonly type: "address";
+        }, {
+            readonly internalType: "address";
+            readonly name: "to";
+            readonly type: "address";
+        }, {
+            readonly internalType: "uint256";
+            readonly name: "value";
+            readonly type: "uint256";
+        }];
+        readonly name: "transferFrom";
+        readonly outputs: readonly [{
+            readonly internalType: "bool";
+            readonly name: "";
+            readonly type: "bool";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }];
+    static createInterface(): PNKInterface;
+    static connect(address: string, runner?: ContractRunner | null): PNK;
+}
+export {};
+//# sourceMappingURL=PNK__factory.d.ts.map

@@ -1,0 +1,206 @@
+import { ContractFactory, ContractTransactionResponse } from "ethers";
+import type { Signer, ContractDeployTransaction, ContractRunner } from "ethers";
+import type { NonPayableOverrides } from "../../common.js";
+import type { DisputeTemplateRegistry, DisputeTemplateRegistryInterface } from "../../arbitration/DisputeTemplateRegistry.js";
+type DisputeTemplateRegistryConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+export declare class DisputeTemplateRegistry__factory extends ContractFactory {
+    constructor(...args: DisputeTemplateRegistryConstructorParams);
+    getDeployTransaction(overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<ContractDeployTransaction>;
+    deploy(overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<DisputeTemplateRegistry & {
+        deploymentTransaction(): ContractTransactionResponse;
+    }>;
+    connect(runner: ContractRunner | null): DisputeTemplateRegistry__factory;
+    static readonly bytecode = "0x60a06040523060805234801561001457600080fd5b5061001d610022565b6100d3565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0e805468010000000000000000900460ff16156100715760405162dc149f60e41b815260040160405180910390fd5b80546001600160401b03908116146100d05780546001600160401b0319166001600160401b0390811782556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a15b50565b608051610a216100fc600039600081816103010152818161032a01526105270152610a216000f3fe6080604052600436106100765760003560e01c80630c340a241461007b5780633a283d7d146100b8578063472abf68146100dc5780634a994174146100f35780634f1ef2861461011357806352d1902d1461012657806354fd4d501461013b578063c4d66de814610179578063e4c0aaf414610199575b600080fd5b34801561008757600080fd5b5060005461009b906001600160a01b031681565b6040516001600160a01b0390911681526020015b60405180910390f35b3480156100c457600080fd5b506100ce60015481565b6040519081526020016100af565b3480156100e857600080fd5b506100f16101b9565b005b3480156100ff57600080fd5b506100ce61010e36600461078e565b610280565b6100f161012136600461083b565b6102ed565b34801561013257600080fd5b506100ce61051a565b34801561014757600080fd5b5061016c604051806040016040528060058152602001640302e382e360dc1b81525081565b6040516100af91906108ec565b34801561018557600080fd5b506100f16101943660046108ff565b610578565b3480156101a557600080fd5b506100f16101b43660046108ff565b610660565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0e805460029190600160401b900460ff1680610202575080546001600160401b03808416911610155b1561021f5760405162dc149f60e41b815260040160405180910390fd5b805468ffffffffffffffffff19166001600160401b038316908117600160401b1760ff60401b191682556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a15050565b60018054600091826102918361091a565b919050559050836040516102a59190610941565b6040518091039020817ef7cd7255d1073b4e136dd477c38ea0020c051ab17110cc5bfab0c840ff992485856040516102de92919061095d565b60405180910390a39392505050565b6102f6826106ac565b306001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016148061037457507f00000000000000000000000000000000000000000000000000000000000000006001600160a01b03166103686000805160206109cc8339815191525490565b6001600160a01b031614155b156103925760405163703e46dd60e11b815260040160405180910390fd5b816001600160a01b03166352d1902d6040518163ffffffff1660e01b8152600401602060405180830381865afa9250505080156103ec575060408051601f3d908101601f191682019092526103e99181019061098b565b60015b61041957604051630c76093760e01b81526001600160a01b03831660048201526024015b60405180910390fd5b6000805160206109cc833981519152811461044a57604051632a87526960e21b815260048101829052602401610410565b6000805160206109cc8339815191528390556040516001600160a01b038416907fbc7cd75a20ee27fd9adebab32041f755214dbc6bffa90cc0225b39da2e5c2d3b90600090a2815115610515576000836001600160a01b0316836040516104b19190610941565b600060405180830381855af49150503d80600081146104ec576040519150601f19603f3d011682016040523d82523d6000602084013e6104f1565b606091505b5050905080610513576040516339b21b5d60e11b815260040160405180910390fd5b505b505050565b6000306001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146105655760405163703e46dd60e11b815260040160405180910390fd5b506000805160206109cc83398151915290565b7ff0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a0e805460019190600160401b900460ff16806105c1575080546001600160401b03808416911610155b156105de5760405162dc149f60e41b815260040160405180910390fd5b8054600160401b6001600160401b03841668ffffffffffffffffff199092168217178255600080546001600160a01b0319166001600160a01b038616179055815460ff60401b191682556040519081527fc7f505b2f371ae2175ee4913f4499e1f2633a7b5936321eed1cdaeb6115181d29060200160405180910390a1505050565b6000546001600160a01b0316331461068a5760405162461bcd60e51b8152600401610410906109a4565b600080546001600160a01b0319166001600160a01b0392909216919091179055565b6000546001600160a01b031633146106d65760405162461bcd60e51b8152600401610410906109a4565b50565b634e487b7160e01b600052604160045260246000fd5b6000806001600160401b03841115610709576107096106d9565b50604051601f19601f85018116603f011681018181106001600160401b0382111715610737576107376106d9565b60405283815290508082840185101561074f57600080fd5b83836020830137600060208583010152509392505050565b600082601f83011261077857600080fd5b610787838335602085016106ef565b9392505050565b6000806000606084860312156107a357600080fd5b83356001600160401b038111156107b957600080fd5b6107c586828701610767565b93505060208401356001600160401b038111156107e157600080fd5b6107ed86828701610767565b92505060408401356001600160401b0381111561080957600080fd5b61081586828701610767565b9150509250925092565b80356001600160a01b038116811461083657600080fd5b919050565b6000806040838503121561084e57600080fd5b6108578361081f565b915060208301356001600160401b0381111561087257600080fd5b8301601f8101851361088357600080fd5b610892858235602084016106ef565b9150509250929050565b60005b838110156108b757818101518382015260200161089f565b50506000910152565b600081518084526108d881602086016020860161089c565b601f01601f19169290920160200192915050565b60208152600061078760208301846108c0565b60006020828403121561091157600080fd5b6107878261081f565b60006001820161093a57634e487b7160e01b600052601160045260246000fd5b5060010190565b6000825161095381846020870161089c565b9190910192915050565b60408152600061097060408301856108c0565b828103602084015261098281856108c0565b95945050505050565b60006020828403121561099d57600080fd5b5051919050565b6020808252600d908201526c476f7665726e6f72206f6e6c7960981b60408201526060019056fe360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbca2646970667358221220824b519bc278f6320d49ad83ae79b1c15de9785d55c72ae6d946281532e8e72264736f6c634300081c0033";
+    static readonly abi: readonly [{
+        readonly inputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "AlreadyInitialized";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "FailedDelegateCall";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "implementation";
+            readonly type: "address";
+        }];
+        readonly name: "InvalidImplementation";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "NotInitializing";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "UUPSUnauthorizedCallContext";
+        readonly type: "error";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "slot";
+            readonly type: "bytes32";
+        }];
+        readonly name: "UUPSUnsupportedProxiableUUID";
+        readonly type: "error";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "uint256";
+            readonly name: "_templateId";
+            readonly type: "uint256";
+        }, {
+            readonly indexed: true;
+            readonly internalType: "string";
+            readonly name: "_templateTag";
+            readonly type: "string";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "string";
+            readonly name: "_templateData";
+            readonly type: "string";
+        }, {
+            readonly indexed: false;
+            readonly internalType: "string";
+            readonly name: "_templateDataMappings";
+            readonly type: "string";
+        }];
+        readonly name: "DisputeTemplate";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: false;
+            readonly internalType: "uint64";
+            readonly name: "version";
+            readonly type: "uint64";
+        }];
+        readonly name: "Initialized";
+        readonly type: "event";
+    }, {
+        readonly anonymous: false;
+        readonly inputs: readonly [{
+            readonly indexed: true;
+            readonly internalType: "address";
+            readonly name: "newImplementation";
+            readonly type: "address";
+        }];
+        readonly name: "Upgraded";
+        readonly type: "event";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }];
+        readonly name: "changeGovernor";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "governor";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }];
+        readonly name: "initialize";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "initialize2";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "proxiableUUID";
+        readonly outputs: readonly [{
+            readonly internalType: "bytes32";
+            readonly name: "";
+            readonly type: "bytes32";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "_templateTag";
+            readonly type: "string";
+        }, {
+            readonly internalType: "string";
+            readonly name: "_templateData";
+            readonly type: "string";
+        }, {
+            readonly internalType: "string";
+            readonly name: "_templateDataMappings";
+            readonly type: "string";
+        }];
+        readonly name: "setDisputeTemplate";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "templateId";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "templates";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "newImplementation";
+            readonly type: "address";
+        }, {
+            readonly internalType: "bytes";
+            readonly name: "data";
+            readonly type: "bytes";
+        }];
+        readonly name: "upgradeToAndCall";
+        readonly outputs: readonly [];
+        readonly stateMutability: "payable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "version";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }];
+    static createInterface(): DisputeTemplateRegistryInterface;
+    static connect(address: string, runner?: ContractRunner | null): DisputeTemplateRegistry;
+}
+export {};
+//# sourceMappingURL=DisputeTemplateRegistry__factory.d.ts.map

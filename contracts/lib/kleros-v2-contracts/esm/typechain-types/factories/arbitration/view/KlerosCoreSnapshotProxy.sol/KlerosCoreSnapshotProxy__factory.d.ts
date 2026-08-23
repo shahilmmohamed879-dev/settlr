@@ -1,0 +1,118 @@
+import { ContractFactory, ContractTransactionResponse } from "ethers";
+import type { Signer, AddressLike, ContractDeployTransaction, ContractRunner } from "ethers";
+import type { NonPayableOverrides } from "../../../../common.js";
+import type { KlerosCoreSnapshotProxy, KlerosCoreSnapshotProxyInterface } from "../../../../arbitration/view/KlerosCoreSnapshotProxy.sol/KlerosCoreSnapshotProxy.js";
+type KlerosCoreSnapshotProxyConstructorParams = [signer?: Signer] | ConstructorParameters<typeof ContractFactory>;
+export declare class KlerosCoreSnapshotProxy__factory extends ContractFactory {
+    constructor(...args: KlerosCoreSnapshotProxyConstructorParams);
+    getDeployTransaction(_governor: AddressLike, _core: AddressLike, overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<ContractDeployTransaction>;
+    deploy(_governor: AddressLike, _core: AddressLike, overrides?: NonPayableOverrides & {
+        from?: string;
+    }): Promise<KlerosCoreSnapshotProxy & {
+        deploymentTransaction(): ContractTransactionResponse;
+    }>;
+    connect(runner: ContractRunner | null): KlerosCoreSnapshotProxy__factory;
+    static readonly bytecode = "0x6080604052348015600f57600080fd5b50604051610528380380610528833981016040819052602c916073565b600180546001600160a01b039384166001600160a01b0319918216179091556000805492909316911617905560a8565b6001600160a01b0381168114607057600080fd5b50565b60008060408385031215608557600080fd5b8251608e81605c565b6020840151909250609d81605c565b809150509250929050565b610471806100b76000396000f3fe608060405234801561001057600080fd5b50600436106100785760003560e01c806306fdde031461007d5780630c340a24146100c1578063313ce567146100ec57806370a08231146101065780638e4264601461012757806395d89b411461013c578063e4c0aaf414610160578063f2f4eb2614610173575b600080fd5b6100ab6040518060400160405280600f81526020016e29ba30b5b2b2102834b730b5b4b7b760891b81525081565b6040516100b8919061031c565b60405180910390f35b6001546100d4906001600160a01b031681565b6040516001600160a01b0390911681526020016100b8565b6100f4601281565b60405160ff90911681526020016100b8565b610119610114366004610382565b610186565b6040519081526020016100b8565b61013a610135366004610382565b61027b565b005b6100ab604051806040016040528060058152602001647374504e4b60d81b81525081565b61013a61016e366004610382565b6102d0565b6000546100d4906001600160a01b031681565b60008060009054906101000a90046001600160a01b03166001600160a01b0316632e1daf2f6040518163ffffffff1660e01b8152600401602060405180830381865afa1580156101da573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101fe91906103a6565b604051631a383be960e31b81526001600160a01b03848116600483015260006024830152919091169063d1c1df4890604401608060405180830381865afa15801561024d573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061027191906103c3565b5091949350505050565b6001546001600160a01b031633146102ae5760405162461bcd60e51b81526004016102a5906103f9565b60405180910390fd5b600080546001600160a01b0319166001600160a01b0392909216919091179055565b6001546001600160a01b031633146102fa5760405162461bcd60e51b81526004016102a5906103f9565b600180546001600160a01b0319166001600160a01b0392909216919091179055565b602081526000825180602084015260005b8181101561034a576020818601810151604086840101520161032d565b506000604082850101526040601f19601f83011684010191505092915050565b6001600160a01b038116811461037f57600080fd5b50565b60006020828403121561039457600080fd5b813561039f8161036a565b9392505050565b6000602082840312156103b857600080fd5b815161039f8161036a565b600080600080608085870312156103d957600080fd5b505082516020840151604085015160609095015191969095509092509050565b60208082526022908201527f416363657373206e6f7420616c6c6f7765643a20476f7665726e6f72206f6e6c6040820152613c9760f11b60608201526080019056fea264697066735822122073f21c8b6d33447b7835b4d1b407d310308303081d207c1d27192909f7cbaf6264736f6c634300081c0033";
+    static readonly abi: readonly [{
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }, {
+            readonly internalType: "contract IKlerosCore";
+            readonly name: "_core";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "nonpayable";
+        readonly type: "constructor";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_account";
+            readonly type: "address";
+        }];
+        readonly name: "balanceOf";
+        readonly outputs: readonly [{
+            readonly internalType: "uint256";
+            readonly name: "totalStaked";
+            readonly type: "uint256";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "contract IKlerosCore";
+            readonly name: "_core";
+            readonly type: "address";
+        }];
+        readonly name: "changeCore";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "_governor";
+            readonly type: "address";
+        }];
+        readonly name: "changeGovernor";
+        readonly outputs: readonly [];
+        readonly stateMutability: "nonpayable";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "core";
+        readonly outputs: readonly [{
+            readonly internalType: "contract IKlerosCore";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "decimals";
+        readonly outputs: readonly [{
+            readonly internalType: "uint8";
+            readonly name: "";
+            readonly type: "uint8";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "governor";
+        readonly outputs: readonly [{
+            readonly internalType: "address";
+            readonly name: "";
+            readonly type: "address";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "name";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }, {
+        readonly inputs: readonly [];
+        readonly name: "symbol";
+        readonly outputs: readonly [{
+            readonly internalType: "string";
+            readonly name: "";
+            readonly type: "string";
+        }];
+        readonly stateMutability: "view";
+        readonly type: "function";
+    }];
+    static createInterface(): KlerosCoreSnapshotProxyInterface;
+    static connect(address: string, runner?: ContractRunner | null): KlerosCoreSnapshotProxy;
+}
+export {};

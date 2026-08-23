@@ -1,7 +1,14 @@
 ﻿services:
   settlr-foundry:
     image: ghcr.io/foundry-rs/foundry:latest
-    entrypoint: ["forge"]
+    working_dir: /workspace/contracts
+
+    environment:
+      GIT_CONFIG_COUNT: "1"
+      GIT_CONFIG_KEY_0: "safe.directory"
+      GIT_CONFIG_VALUE_0: "/workspace/contracts"
+
     volumes:
-      - ./contracts:/contracts
-    working_dir: /contracts
+      - .:/workspace
+
+    entrypoint: forge
