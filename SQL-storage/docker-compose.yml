@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: settlr-postgres
+    environment:
+      POSTGRES_USER: settlr
+      POSTGRES_PASSWORD: settlr_password
+      POSTGRES_DB: settlr
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
