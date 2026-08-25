@@ -275,7 +275,7 @@ contract SettlrEscrowTest is Test {
 
         vm.prank(client);
 
-        vm.expectRevert("Task mismatch");
+        vm.expectRevert("Cannot dispute now");
 
         escrow.openDispute(
             TASK_ID,
