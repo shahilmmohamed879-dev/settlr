@@ -1,139 +1,109 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
 import {TaskMarket} from "../src/TaskMarket.sol";
 import {ITaskMarket} from "../src/interfaces/ITaskMarket.sol";
 
 contract TaskMarketTest is Test {
-    TaskMarket internal taskMarket;
+    TaskMarket market;
 
-    address internal client;
-    address internal solver;
-    address internal anotherSolver;
+    address client = address(1);
+    address freelancer1 = address(2);
+    address freelancer2 = address(3);
+    address attacker = address(4);
 
-    uint256 internal constant TASK_REWARD = 1 ether;
-    uint256 internal constant BID_AMOUNT = 0.7 ether;
-    uint256 internal constant SECOND_BID_AMOUNT = 0.5 ether;
+    uint256 constant BUDGET = 1_000e6;
+    uint256 constant BID_1 = 800e6;
+    uint256 constant BID_2 = 700e6;
 
-    bytes32 internal constant REQUIREMENTS_HASH =
-        keccak256("SETTLR-TASK-REQUIREMENTS");
-
-    bytes32 internal constant SUBMISSION_HASH =
-        keccak256("SETTLR-WORK-SUBMISSION");
-
-    bytes32 internal constant SECOND_SUBMISSION_HASH =
-        keccak256("SETTLR-SECOND-SUBMISSION");
+    uint256 deadline;
 
     function setUp() public {
-        taskMarket = new TaskMarket();
-
-        client = makeAddr("client");
-        solver = makeAddr("solver");
-        anotherSolver = makeAddr("anotherSolver");
-
-        vm.deal(client, 10 ether);
-        vm.deal(solver, 10 ether);
-        vm.deal(anotherSolver, 10 ether);
+        market = new TaskMarket();
+        deadline = block.timestamp + 7 days;
     }
 
-    // =============================================================
-    // HELPERS
-    // =============================================================
-
-    function _createTask() internal returns (uint256 taskId) {
-        uint256 deadline = block.timestamp + 7 days;
-
+    function _postTask() internal returns (uint256) {
         vm.prank(client);
 
-        taskId = taskMarket.createTask{value: TASK_REWARD}(
-            REQUIREMENTS_HASH,
+        return market.postTask(
+            BUDGET,
+            "QmSRSHash",
             deadline
         );
-    }
-
-    function _createAndAssignTask() internal returns (uint256 taskId) {
-        taskId = _createTask();
-
-        vm.prank(solver);
-
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
-
-        vm.prank(client);
-
-        taskMarket.acceptBid(
-            taskId,
-            solver
-        );
-    }
-
-    function _createAndStartTask() internal returns (uint256 taskId) {
-        taskId = _createAndAssignTask();
-
-        vm.prank(solver);
-
-        taskMarket.startTask(taskId);
     }
 
     // =============================================================
     // TASK CREATION
     // =============================================================
 
-    function testCreateTask() public {
-        uint256 deadline = block.timestamp + 7 days;
+    function testClientCanPostTask() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(client);
-
-        uint256 taskId = taskMarket.createTask{value: TASK_REWARD}(
-            REQUIREMENTS_HASH,
-            deadline
-        );
-
-        ITaskMarket.Task memory task = taskMarket.getTask(taskId);
+        ITaskMarket.Task memory task = market.getTask(taskId);
 
         assertEq(task.taskId, taskId);
         assertEq(task.client, client);
-        assertEq(task.reward, TASK_REWARD);
-        assertEq(
-            task.requirementsHash,
-            REQUIREMENTS_HASH
-        );
+        assertEq(task.budget, BUDGET);
+        assertEq(task.srsHash, "QmSRSHash");
         assertEq(
             uint256(task.status),
             uint256(ITaskMarket.TaskStatus.Open)
         );
-        assertEq(task.solver, address(0));
-        assertEq(task.createdAt, block.timestamp);
+        assertEq(task.freelancer, address(0));
         assertEq(task.deadline, deadline);
         assertEq(task.submissionHash, bytes32(0));
     }
 
-    function testCannotCreateTaskWithZeroReward() public {
-        uint256 deadline = block.timestamp + 7 days;
+    function testTaskIdsIncrement() public {
+        uint256 first = _postTask();
 
         vm.prank(client);
 
-        vm.expectRevert(TaskMarket.InvalidReward.selector);
+        uint256 second = market.postTask(
+            BUDGET,
+            "QmSecondSRS",
+            deadline
+        );
 
-        taskMarket.createTask{value: 0}(
-            REQUIREMENTS_HASH,
+        assertEq(first, 1);
+        assertEq(second, 2);
+    }
+
+    function testCannotCreateTaskWithZeroBudget() public {
+        vm.prank(client);
+
+        vm.expectRevert(TaskMarket.InvalidBudget.selector);
+
+        market.postTask(
+            0,
+            "QmSRSHash",
+            deadline
+        );
+    }
+
+    function testCannotCreateTaskWithEmptySRS() public {
+        vm.prank(client);
+
+        vm.expectRevert(TaskMarket.InvalidSRSHash.selector);
+
+        market.postTask(
+            BUDGET,
+            "",
             deadline
         );
     }
 
     function testCannotCreateTaskWithPastDeadline() public {
-        uint256 deadline = block.timestamp - 1;
-
         vm.prank(client);
 
         vm.expectRevert(TaskMarket.InvalidDeadline.selector);
 
-        taskMarket.createTask{value: TASK_REWARD}(
-            REQUIREMENTS_HASH,
-            deadline
+        market.postTask(
+            BUDGET,
+            "QmSRSHash",
+            block.timestamp
         );
     }
 
@@ -141,240 +111,178 @@ contract TaskMarketTest is Test {
     // BIDDING
     // =============================================================
 
-    function testSubmitBid() public {
-        uint256 taskId = _createTask();
+    function testFreelancerCanSubmitBid() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
 
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
+        market.submitBid(taskId, BID_1);
 
         ITaskMarket.Bid[] memory bids =
-            taskMarket.getBids(taskId);
+            market.getBids(taskId);
 
         assertEq(bids.length, 1);
-        assertEq(bids[0].solver, solver);
-        assertEq(bids[0].amount, BID_AMOUNT);
-        assertFalse(bids[0].accepted);
+        assertEq(bids[0].freelancer, freelancer1);
+        assertEq(bids[0].amount, BID_1);
+        assertTrue(!bids[0].accepted);
     }
 
-    function testMultipleSolversCanBid() public {
-        uint256 taskId = _createTask();
+    function testMultipleFreelancersCanBid() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
-
-        vm.prank(anotherSolver);
-
-        taskMarket.submitBid(
-            taskId,
-            SECOND_BID_AMOUNT
-        );
+        vm.prank(freelancer2);
+        market.submitBid(taskId, BID_2);
 
         ITaskMarket.Bid[] memory bids =
-            taskMarket.getBids(taskId);
+            market.getBids(taskId);
 
         assertEq(bids.length, 2);
-
-        assertEq(bids[0].solver, solver);
-        assertEq(bids[0].amount, BID_AMOUNT);
-
-        assertEq(bids[1].solver, anotherSolver);
-        assertEq(
-            bids[1].amount,
-            SECOND_BID_AMOUNT
-        );
+        assertEq(bids[0].freelancer, freelancer1);
+        assertEq(bids[0].amount, BID_1);
+        assertEq(bids[1].freelancer, freelancer2);
+        assertEq(bids[1].amount, BID_2);
     }
 
-    function testCannotSubmitZeroBid() public {
-        uint256 taskId = _createTask();
-
-        vm.prank(solver);
-
-        vm.expectRevert(
-            TaskMarket.InvalidBidAmount.selector
-        );
-
-        taskMarket.submitBid(
-            taskId,
-            0
-        );
-    }
-
-    function testCannotSubmitBidAboveReward() public {
-        uint256 taskId = _createTask();
-
-        vm.prank(solver);
-
-        vm.expectRevert(
-            TaskMarket.InvalidBidAmount.selector
-        );
-
-        taskMarket.submitBid(
-            taskId,
-            TASK_REWARD + 1
-        );
-    }
-
-    function testClientCannotBidOnOwnTask() public {
-        uint256 taskId = _createTask();
+    function testClientCannotBid() public {
+        uint256 taskId = _postTask();
 
         vm.prank(client);
 
-        vm.expectRevert(
-            TaskMarket.CannotBidOwnTask.selector
-        );
+        vm.expectRevert(TaskMarket.ClientCannotBid.selector);
 
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
+        market.submitBid(taskId, BID_1);
     }
 
-    function testCannotBidAfterDeadline() public {
-        uint256 taskId = _createTask();
+    function testFreelancerCannotBidTwice() public {
+        uint256 taskId = _postTask();
 
-        vm.warp(block.timestamp + 7 days);
+        vm.startPrank(freelancer1);
 
-        vm.prank(solver);
+        market.submitBid(taskId, BID_1);
 
-        vm.expectRevert(
-            TaskMarket.DeadlinePassed.selector
-        );
+        vm.expectRevert(TaskMarket.AlreadyBid.selector);
 
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
+        market.submitBid(taskId, BID_1);
+
+        vm.stopPrank();
+    }
+
+    function testCannotBidAboveBudget() public {
+        uint256 taskId = _postTask();
+
+        vm.prank(freelancer1);
+
+        vm.expectRevert(TaskMarket.InvalidBidAmount.selector);
+
+        market.submitBid(taskId, BUDGET + 1);
+    }
+
+    function testCannotBidZero() public {
+        uint256 taskId = _postTask();
+
+        vm.prank(freelancer1);
+
+        vm.expectRevert(TaskMarket.InvalidBidAmount.selector);
+
+        market.submitBid(taskId, 0);
+    }
+
+    function testCannotBidOnInvalidTask() public {
+        vm.prank(freelancer1);
+
+        vm.expectRevert(TaskMarket.TaskNotFound.selector);
+
+        market.submitBid(999, BID_1);
     }
 
     // =============================================================
-    // BID ACCEPTANCE
+    // WINNER SELECTION
     // =============================================================
 
-    function testAcceptBid() public {
-        uint256 taskId = _createTask();
+    function testClientCanSelectWinner() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
+        vm.prank(freelancer2);
+        market.submitBid(taskId, BID_2);
 
         vm.prank(client);
 
-        taskMarket.acceptBid(
+        market.selectWinner(
             taskId,
-            solver
+            freelancer2
         );
 
         ITaskMarket.Task memory task =
-            taskMarket.getTask(taskId);
+            market.getTask(taskId);
 
-        assertEq(task.solver, solver);
+        assertEq(task.freelancer, freelancer2);
+
         assertEq(
             uint256(task.status),
             uint256(ITaskMarket.TaskStatus.Assigned)
         );
 
-        ITaskMarket.Bid[] memory bids =
-            taskMarket.getBids(taskId);
-
-        assertTrue(bids[0].accepted);
-    }
-
-    function testOnlyClientCanAcceptBid() public {
-        uint256 taskId = _createTask();
-
-        vm.prank(solver);
-
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
-
-        vm.prank(anotherSolver);
-
-        vm.expectRevert(
-            TaskMarket.NotTaskClient.selector
-        );
-
-        taskMarket.acceptBid(
-            taskId,
-            solver
+        assertEq(
+            market.getAcceptedBid(taskId),
+            BID_2
         );
     }
 
-    function testCannotAcceptNonexistentBid() public {
-        uint256 taskId = _createTask();
+    function testOnlyClientCanSelectWinner() public {
+        uint256 taskId = _postTask();
+
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
+
+        vm.prank(attacker);
+
+        vm.expectRevert(TaskMarket.NotClient.selector);
+
+        market.selectWinner(
+            taskId,
+            freelancer1
+        );
+    }
+
+    function testCannotSelectNonBidder() public {
+        uint256 taskId = _postTask();
+
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
         vm.prank(client);
 
-        vm.expectRevert(
-            TaskMarket.BidNotFound.selector
-        );
+        vm.expectRevert(TaskMarket.BidNotFound.selector);
 
-        taskMarket.acceptBid(
+        market.selectWinner(
             taskId,
-            solver
+            freelancer2
         );
     }
 
-    function testCannotAcceptAnotherBidAfterAssignment() public {
-        uint256 taskId = _createTask();
+    function testCannotSelectWinnerTwice() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
-
-        taskMarket.submitBid(
-            taskId,
-            BID_AMOUNT
-        );
-
-        vm.prank(anotherSolver);
-
-        taskMarket.submitBid(
-            taskId,
-            SECOND_BID_AMOUNT
-        );
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
         vm.prank(client);
-
-        taskMarket.acceptBid(
+        market.selectWinner(
             taskId,
-            solver
+            freelancer1
         );
 
-        vm.prank(client);
+        vm.expectRevert(TaskMarket.TaskNotOpen.selector);
 
-        vm.expectRevert(
-            TaskMarket.TaskNotOpen.selector
-        );
-
-        taskMarket.acceptBid(
+        market.selectWinner(
             taskId,
-            anotherSolver
-        );
-    }
-
-    function testCannotBidAfterAssignment() public {
-        uint256 taskId = _createAndAssignTask();
-
-        vm.prank(anotherSolver);
-
-        vm.expectRevert(
-            TaskMarket.TaskNotOpen.selector
-        );
-
-        taskMarket.submitBid(
-            taskId,
-            SECOND_BID_AMOUNT
+            freelancer1
         );
     }
 
@@ -382,78 +290,90 @@ contract TaskMarketTest is Test {
     // START TASK
     // =============================================================
 
-    function testSolverCanStartAssignedTask() public {
-        uint256 taskId = _createAndAssignTask();
+    function testSelectedFreelancerCanStartTask() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
-        taskMarket.startTask(taskId);
+        vm.prank(client);
+        market.selectWinner(
+            taskId,
+            freelancer1
+        );
+
+        vm.prank(freelancer1);
+        market.startTask(taskId);
 
         ITaskMarket.Task memory task =
-            taskMarket.getTask(taskId);
+            market.getTask(taskId);
 
         assertEq(
             uint256(task.status),
             uint256(ITaskMarket.TaskStatus.InProgress)
         );
-
-        assertEq(task.solver, solver);
     }
 
-    function testWrongSolverCannotStartTask() public {
-        uint256 taskId = _createAndAssignTask();
+    function testOtherFreelancerCannotStartTask() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(anotherSolver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
-        vm.expectRevert(
-            TaskMarket.NotTaskSolver.selector
+        vm.prank(client);
+        market.selectWinner(
+            taskId,
+            freelancer1
         );
 
-        taskMarket.startTask(taskId);
+        vm.prank(freelancer2);
+
+        vm.expectRevert(TaskMarket.NotFreelancer.selector);
+
+        market.startTask(taskId);
     }
 
     function testCannotStartUnassignedTask() public {
-        uint256 taskId = _createTask();
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
 
-        vm.expectRevert(
-            TaskMarket.InvalidTaskStatus.selector
-        );
+        vm.expectRevert(TaskMarket.InvalidTaskStatus.selector);
 
-        taskMarket.startTask(taskId);
-    }
-
-    function testCannotStartTaskAfterDeadline() public {
-        uint256 taskId = _createAndAssignTask();
-
-        vm.warp(block.timestamp + 7 days);
-
-        vm.prank(solver);
-
-        vm.expectRevert(
-            TaskMarket.DeadlinePassed.selector
-        );
-
-        taskMarket.startTask(taskId);
+        market.startTask(taskId);
     }
 
     // =============================================================
     // WORK SUBMISSION
     // =============================================================
 
-    function testSolverCanSubmitWork() public {
-        uint256 taskId = _createAndStartTask();
+    function testFreelancerCanSubmitWork() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
-        taskMarket.submitWork(
+        vm.prank(client);
+        market.selectWinner(
             taskId,
-            SUBMISSION_HASH
+            freelancer1
+        );
+
+        vm.prank(freelancer1);
+        market.startTask(taskId);
+
+        bytes32 submissionHash =
+            keccak256("submission");
+
+        vm.prank(freelancer1);
+
+        market.submitWork(
+            taskId,
+            submissionHash
         );
 
         ITaskMarket.Task memory task =
-            taskMarket.getTask(taskId);
+            market.getTask(taskId);
 
         assertEq(
             uint256(task.status),
@@ -462,111 +382,59 @@ contract TaskMarketTest is Test {
 
         assertEq(
             task.submissionHash,
-            SUBMISSION_HASH
+            submissionHash
         );
     }
 
-    function testWrongSolverCannotSubmitWork() public {
-        uint256 taskId = _createAndStartTask();
+    function testOtherFreelancerCannotSubmitWork() public {
+        uint256 taskId = _postTask();
 
-        vm.prank(anotherSolver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
 
-        vm.expectRevert(
-            TaskMarket.NotTaskSolver.selector
-        );
-
-        taskMarket.submitWork(
+        vm.prank(client);
+        market.selectWinner(
             taskId,
-            SUBMISSION_HASH
-        );
-    }
-
-    function testCannotSubmitWorkBeforeStarting() public {
-        uint256 taskId = _createAndAssignTask();
-
-        vm.prank(solver);
-
-        vm.expectRevert(
-            TaskMarket.InvalidTaskStatus.selector
+            freelancer1
         );
 
-        taskMarket.submitWork(
+        vm.prank(freelancer1);
+        market.startTask(taskId);
+
+        vm.prank(freelancer2);
+
+        vm.expectRevert(TaskMarket.NotFreelancer.selector);
+
+        market.submitWork(
             taskId,
-            SUBMISSION_HASH
+            keccak256("submission")
         );
     }
 
     function testCannotSubmitEmptySubmissionHash() public {
-        uint256 taskId = _createAndStartTask();
+        uint256 taskId = _postTask();
 
-        vm.prank(solver);
+        vm.prank(freelancer1);
+        market.submitBid(taskId, BID_1);
+
+        vm.prank(client);
+        market.selectWinner(
+            taskId,
+            freelancer1
+        );
+
+        vm.prank(freelancer1);
+        market.startTask(taskId);
+
+        vm.prank(freelancer1);
 
         vm.expectRevert(
             TaskMarket.InvalidSubmissionHash.selector
         );
 
-        taskMarket.submitWork(
+        market.submitWork(
             taskId,
             bytes32(0)
         );
-    }
-
-    function testCannotSubmitWorkAfterDeadline() public {
-        uint256 taskId = _createAndStartTask();
-
-        vm.warp(block.timestamp + 7 days);
-
-        vm.prank(solver);
-
-        vm.expectRevert(
-            TaskMarket.DeadlinePassed.selector
-        );
-
-        taskMarket.submitWork(
-            taskId,
-            SUBMISSION_HASH
-        );
-    }
-
-    function testCannotSubmitWorkTwice() public {
-        uint256 taskId = _createAndStartTask();
-
-        vm.prank(solver);
-
-        taskMarket.submitWork(
-            taskId,
-            SUBMISSION_HASH
-        );
-
-        vm.prank(solver);
-
-        vm.expectRevert(
-            TaskMarket.InvalidTaskStatus.selector
-        );
-
-        taskMarket.submitWork(
-            taskId,
-            SECOND_SUBMISSION_HASH
-        );
-    }
-
-    // =============================================================
-    // TASK LOOKUPS
-    // =============================================================
-
-    function testCannotGetNonexistentTask() public {
-        vm.expectRevert(
-            TaskMarket.TaskNotFound.selector
-        );
-
-        taskMarket.getTask(999);
-    }
-
-    function testCannotGetBidsForNonexistentTask() public {
-        vm.expectRevert(
-            TaskMarket.TaskNotFound.selector
-        );
-
-        taskMarket.getBids(999);
     }
 }

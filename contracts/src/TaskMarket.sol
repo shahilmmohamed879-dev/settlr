@@ -1,184 +1,289 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
 
 import {ITaskMarket} from "./interfaces/ITaskMarket.sol";
 
 contract TaskMarket is ITaskMarket {
-    struct MarketTask {
-        address client;
-        uint256 budget;
-        string srsHash;
-        address[] bidders;
-        address winner;
-        bool exists;
-        bool winnerSelected;
-    }
+    uint256 private _nextTaskId;
 
-    uint256 public nextTaskId = 1;
+    mapping(uint256 => Task) private _tasks;
+    mapping(uint256 => Bid[]) private _bids;
 
-    mapping(uint256 => MarketTask) public tasks;
-
-    mapping(uint256 => mapping(address => bool)) public hasBid;
-
-    event TaskPosted(
+    event TaskCreated(
         uint256 indexed taskId,
         address indexed client,
-        uint256 budget,
-        string srsHash
+        uint256 reward,
+        bytes32 requirementsHash,
+        uint256 deadline
     );
 
     event BidSubmitted(
         uint256 indexed taskId,
-        address indexed freelancer
+        address indexed solver,
+        uint256 amount
     );
 
-    event WinnerSelected(
+    event BidAccepted(
         uint256 indexed taskId,
-        address indexed freelancer
+        address indexed solver,
+        uint256 amount
     );
 
-    modifier taskExists(uint256 _taskId) {
-        require(
-            tasks[_taskId].exists,
-            "Task does not exist"
-        );
-        _;
+    event TaskStarted(
+        uint256 indexed taskId,
+        address indexed solver
+    );
+
+    event WorkSubmitted(
+        uint256 indexed taskId,
+        address indexed solver,
+        bytes32 submissionHash
+    );
+
+    error InvalidDeadline();
+    error InvalidReward();
+    error TaskNotFound();
+    error TaskNotOpen();
+    error NotTaskClient();
+    error CannotBidOwnTask();
+    error InvalidBidAmount();
+    error BidNotFound();
+    error BidAlreadyAccepted();
+    error DeadlinePassed();
+    error NotTaskSolver();
+    error InvalidTaskStatus();
+    error InvalidSubmissionHash();
+
+    constructor() {
+        _nextTaskId = 1;
     }
 
-    modifier onlyClient(uint256 _taskId) {
-        require(
-            msg.sender == tasks[_taskId].client,
-            "Not client"
-        );
-        _;
-    }
+    // =============================================================
+    // CREATE TASK
+    // =============================================================
 
-    function postTask(
-        uint256 _budget,
-        string calldata _srsHash
-    )
-        external
-        override
-        returns (uint256)
-    {
-        require(_budget > 0, "Invalid budget");
-        require(
-            bytes(_srsHash).length > 0,
-            "Empty SRS hash"
-        );
+    function createTask(
+        bytes32 requirementsHash,
+        uint256 deadline
+    ) external payable returns (uint256 taskId) {
+        if (msg.value == 0) {
+            revert InvalidReward();
+        }
 
-        uint256 taskId = nextTaskId++;
+        if (deadline <= block.timestamp) {
+            revert InvalidDeadline();
+        }
 
-        MarketTask storage task = tasks[taskId];
+        taskId = _nextTaskId++;
 
-        task.client = msg.sender;
-        task.budget = _budget;
-        task.srsHash = _srsHash;
-        task.exists = true;
+        _tasks[taskId] = Task({
+            taskId: taskId,
+            client: msg.sender,
+            reward: msg.value,
+            requirementsHash: requirementsHash,
+            status: TaskStatus.Open,
+            solver: address(0),
+            createdAt: block.timestamp,
+            deadline: deadline,
+            submissionHash: bytes32(0)
+        });
 
-        emit TaskPosted(
+        emit TaskCreated(
             taskId,
             msg.sender,
-            _budget,
-            _srsHash
+            msg.value,
+            requirementsHash,
+            deadline
         );
-
-        return taskId;
     }
 
+    // =============================================================
+    // SUBMIT BID
+    // =============================================================
+
     function submitBid(
-        uint256 _taskId
-    )
-        external
-        override
-        taskExists(_taskId)
-    {
-        MarketTask storage task = tasks[_taskId];
+        uint256 taskId,
+        uint256 amount
+    ) external {
+        Task storage task = _getTask(taskId);
 
-        require(
-            msg.sender != task.client,
-            "Client cannot bid"
+        if (task.status != TaskStatus.Open) {
+            revert TaskNotOpen();
+        }
+
+        if (block.timestamp >= task.deadline) {
+            revert DeadlinePassed();
+        }
+
+        if (msg.sender == task.client) {
+            revert CannotBidOwnTask();
+        }
+
+        if (amount == 0 || amount > task.reward) {
+            revert InvalidBidAmount();
+        }
+
+        _bids[taskId].push(
+            Bid({
+                solver: msg.sender,
+                amount: amount,
+                submittedAt: block.timestamp,
+                accepted: false
+            })
         );
-
-        require(
-            !task.winnerSelected,
-            "Winner already selected"
-        );
-
-        require(
-            !hasBid[_taskId][msg.sender],
-            "Already bid"
-        );
-
-        hasBid[_taskId][msg.sender] = true;
-        task.bidders.push(msg.sender);
 
         emit BidSubmitted(
-            _taskId,
+            taskId,
+            msg.sender,
+            amount
+        );
+    }
+
+    // =============================================================
+    // ACCEPT BID
+    // =============================================================
+
+    function acceptBid(
+        uint256 taskId,
+        address solver
+    ) external {
+        Task storage task = _getTask(taskId);
+
+        if (msg.sender != task.client) {
+            revert NotTaskClient();
+        }
+
+        if (task.status != TaskStatus.Open) {
+            revert TaskNotOpen();
+        }
+
+        Bid[] storage bids = _bids[taskId];
+
+        for (uint256 i = 0; i < bids.length; i++) {
+            if (bids[i].solver == solver) {
+                if (bids[i].accepted) {
+                    revert BidAlreadyAccepted();
+                }
+
+                bids[i].accepted = true;
+
+                task.solver = solver;
+                task.status = TaskStatus.Assigned;
+
+                emit BidAccepted(
+                    taskId,
+                    solver,
+                    bids[i].amount
+                );
+
+                return;
+            }
+        }
+
+        revert BidNotFound();
+    }
+
+    // =============================================================
+    // START TASK
+    // =============================================================
+
+    function startTask(
+        uint256 taskId
+    ) external {
+        Task storage task = _getTask(taskId);
+
+        // Check task state FIRST.
+        // This makes an unassigned task return InvalidTaskStatus()
+        // instead of NotTaskSolver().
+        if (task.status != TaskStatus.Assigned) {
+            revert InvalidTaskStatus();
+        }
+
+        if (task.solver != msg.sender) {
+            revert NotTaskSolver();
+        }
+
+        if (block.timestamp >= task.deadline) {
+            revert DeadlinePassed();
+        }
+
+        task.status = TaskStatus.InProgress;
+
+        emit TaskStarted(
+            taskId,
             msg.sender
         );
     }
 
-    /*
-     * Current interface does not contain a winner parameter.
-     * Therefore the client selects from the submitted bidders
-     * using the bidder index.
-     */
-    function selectWinner(
-        uint256 _taskId
-    )
-        external
-        override
-        taskExists(_taskId)
-        onlyClient(_taskId)
-    {
-        MarketTask storage task = tasks[_taskId];
+    // =============================================================
+    // SUBMIT WORK
+    // =============================================================
 
-        require(
-            !task.winnerSelected,
-            "Winner already selected"
-        );
+    function submitWork(
+        uint256 taskId,
+        bytes32 submissionHash
+    ) external {
+        Task storage task = _getTask(taskId);
 
-        require(
-            task.bidders.length > 0,
-            "No bidders"
-        );
+        if (task.solver != msg.sender) {
+            revert NotTaskSolver();
+        }
 
-        /*
-         * Temporary deterministic selection:
-         * first submitted bidder.
-         *
-         * The interface currently has no parameter allowing
-         * the client to specify a bidder.
-         */
-        task.winner = task.bidders[0];
-        task.winnerSelected = true;
+        if (task.status != TaskStatus.InProgress) {
+            revert InvalidTaskStatus();
+        }
 
-        emit WinnerSelected(
-            _taskId,
-            task.winner
+        if (block.timestamp >= task.deadline) {
+            revert DeadlinePassed();
+        }
+
+        if (submissionHash == bytes32(0)) {
+            revert InvalidSubmissionHash();
+        }
+
+        task.submissionHash = submissionHash;
+        task.status = TaskStatus.Submitted;
+
+        emit WorkSubmitted(
+            taskId,
+            msg.sender,
+            submissionHash
         );
     }
 
-    function getBidders(
-        uint256 _taskId
-    )
-        external
-        view
-        taskExists(_taskId)
-        returns (address[] memory)
-    {
-        return tasks[_taskId].bidders;
+    // =============================================================
+    // GET TASK
+    // =============================================================
+
+    function getTask(
+        uint256 taskId
+    ) external view returns (Task memory) {
+        return _getTask(taskId);
     }
 
-    function getWinner(
-        uint256 _taskId
-    )
-        external
-        view
-        taskExists(_taskId)
-        returns (address)
-    {
-        return tasks[_taskId].winner;
+    // =============================================================
+    // GET BIDS
+    // =============================================================
+
+    function getBids(
+        uint256 taskId
+    ) external view returns (Bid[] memory) {
+        _getTask(taskId);
+
+        return _bids[taskId];
+    }
+
+    // =============================================================
+    // INTERNAL TASK LOOKUP
+    // =============================================================
+
+    function _getTask(
+        uint256 taskId
+    ) internal view returns (Task storage task) {
+        task = _tasks[taskId];
+
+        if (task.client == address(0)) {
+            revert TaskNotFound();
+        }
     }
 }

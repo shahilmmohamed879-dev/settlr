@@ -1,15 +1,13 @@
+```solidity
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.20;
 
 interface ITaskMarket {
     enum TaskStatus {
         Open,
         Assigned,
         InProgress,
-        Submitted,
-        Completed,
-        Cancelled,
-        Disputed
+        Submitted
     }
 
     struct Task {
@@ -63,3 +61,4 @@ interface ITaskMarket {
         uint256 taskId
     ) external view returns (Bid[] memory);
 }
+```

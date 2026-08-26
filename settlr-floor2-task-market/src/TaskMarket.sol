@@ -1,3 +1,4 @@
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
@@ -192,9 +193,6 @@ contract TaskMarket is ITaskMarket {
     ) external {
         Task storage task = _getTask(taskId);
 
-        // Check task state FIRST.
-        // This makes an unassigned task return InvalidTaskStatus()
-        // instead of NotTaskSolver().
         if (task.status != TaskStatus.Assigned) {
             revert InvalidTaskStatus();
         }
@@ -287,3 +285,4 @@ contract TaskMarket is ITaskMarket {
         }
     }
 }
+```
