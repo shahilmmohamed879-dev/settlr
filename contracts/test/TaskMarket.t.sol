@@ -142,13 +142,39 @@ contract TaskMarketTest is Test {
         market.submitBid(taskId);
 
         vm.prank(client);
-        market.selectWinner(taskId);
+        market.selectWinner(taskId, freelancer1);
 
         assertEq(
             market.getWinner(taskId),
             freelancer1
         );
     }
+
+    function testClientCanSelectSpecificBidder() public {
+    uint256 taskId = _postTask();
+
+    vm.prank(freelancer1);
+    market.submitBid(taskId);
+
+    vm.prank(freelancer2);
+    market.submitBid(taskId);
+
+    vm.prank(client);
+    market.selectWinner(taskId, freelancer2);
+
+    assertEq(market.getWinner(taskId), freelancer2);
+}
+
+function testCannotSelectNonBidder() public {
+    uint256 taskId = _postTask();
+
+    vm.prank(freelancer1);
+    market.submitBid(taskId);
+
+    vm.prank(client);
+    vm.expectRevert("Not a bidder");
+    market.selectWinner(taskId, freelancer2);
+}
 
     function testCannotSelectWinnerWithoutBids() public {
         uint256 taskId = _postTask();
@@ -157,7 +183,7 @@ contract TaskMarketTest is Test {
 
         vm.expectRevert("No bidders");
 
-        market.selectWinner(taskId);
+        market.selectWinner(taskId, freelancer1);
     }
 
     function testOnlyClientCanSelectWinner() public {
@@ -170,7 +196,7 @@ contract TaskMarketTest is Test {
 
         vm.expectRevert("Not client");
 
-        market.selectWinner(taskId);
+        market.selectWinner(taskId, freelancer1);
     }
 
     function testCannotSelectWinnerTwice() public {
@@ -180,13 +206,13 @@ contract TaskMarketTest is Test {
         market.submitBid(taskId);
 
         vm.prank(client);
-        market.selectWinner(taskId);
+        market.selectWinner(taskId, freelancer1);
 
         vm.prank(client);
 
         vm.expectRevert("Winner already selected");
 
-        market.selectWinner(taskId);
+        market.selectWinner(taskId, freelancer1);
     }
 
     function testCannotBidAfterWinnerSelected() public {
@@ -196,7 +222,7 @@ contract TaskMarketTest is Test {
         market.submitBid(taskId);
 
         vm.prank(client);
-        market.selectWinner(taskId);
+        market.selectWinner(taskId, freelancer1);
 
         vm.prank(freelancer2);
 

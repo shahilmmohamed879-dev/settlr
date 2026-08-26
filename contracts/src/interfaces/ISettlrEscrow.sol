@@ -4,7 +4,7 @@ import {Types} from "../Types.sol";
 
 interface ISettlrEscrow {
     // Core Actions (existing)
-    function createTask(Types.TaskIntent calldata _intent) external;
+    function createTask(Types.TaskIntent calldata _intent) external returns (uint256);
     function lockFreelancerBond(uint256 _taskId) external;
     function submitWork(uint256 _taskId, string calldata _deliveryHash) external;
     function releasePayment(uint256 _taskId) external;

@@ -125,40 +125,25 @@ contract TaskMarket is ITaskMarket {
      * using the bidder index.
      */
     function selectWinner(
-        uint256 _taskId
-    )
-        external
-        override
-        taskExists(_taskId)
-        onlyClient(_taskId)
-    {
-        MarketTask storage task = tasks[_taskId];
+    uint256 _taskId,
+    address _freelancer
+)
+    external
+    override
+    taskExists(_taskId)
+    onlyClient(_taskId)
+{
+    MarketTask storage task = tasks[_taskId];
 
-        require(
-            !task.winnerSelected,
-            "Winner already selected"
-        );
+    require(!task.winnerSelected, "Winner already selected");
+    require(task.bidders.length > 0, "No bidders");
+    require(hasBid[_taskId][_freelancer], "Not a bidder");
 
-        require(
-            task.bidders.length > 0,
-            "No bidders"
-        );
+    task.winner = _freelancer;
+    task.winnerSelected = true;
 
-        /*
-         * Temporary deterministic selection:
-         * first submitted bidder.
-         *
-         * The interface currently has no parameter allowing
-         * the client to specify a bidder.
-         */
-        task.winner = task.bidders[0];
-        task.winnerSelected = true;
-
-        emit WinnerSelected(
-            _taskId,
-            task.winner
-        );
-    }
+    emit WinnerSelected(_taskId, _freelancer);
+}
 
     function getBidders(
         uint256 _taskId

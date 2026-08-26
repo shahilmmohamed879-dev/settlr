@@ -50,25 +50,21 @@ contract ProofRegistryTest is Test {
         );
     }
 
-    function testCannotRegisterSameTaskTwice() public {
-        vm.startPrank(verifier);
+    function testCanRegisterMultipleReceiptsForRevisions() public {
+    vm.startPrank(verifier);
 
-        registry.registerReceipt(
-            TASK_ID,
-            "QmReceiptHash",
-            hex"1234"
-        );
+    registry.registerReceipt(TASK_ID, "QmReceiptHash1", hex"1234");
+    registry.registerReceipt(TASK_ID, "QmReceiptHash2", hex"5678");
 
-        vm.expectRevert("Receipt already exists");
+    vm.stopPrank();
 
-        registry.registerReceipt(
-            TASK_ID,
-            "QmAnotherHash",
-            hex"5678"
-        );
+    assertEq(registry.getReceiptCount(TASK_ID), 2);
+    assertTrue(registry.verifyReceipt(TASK_ID));
 
-        vm.stopPrank();
-    }
+    (string memory hash, bool verified, ) = registry.getLatestReceipt(TASK_ID);
+    assertEq(hash, "QmReceiptHash2");
+    assertTrue(verified);
+}
 
     function testCannotRegisterEmptyReceiptHash() public {
         vm.prank(verifier);

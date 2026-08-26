@@ -14,10 +14,12 @@ contract ProofRegistry is IProofRegistry {
     address public owner;
     address public verifier;
 
-    mapping(uint256 => Receipt) private receipts;
+    // taskId => list of receipts (supports revisions)
+    mapping(uint256 => Receipt[]) private receipts;
 
     event ReceiptRegistered(
         uint256 indexed taskId,
+        uint256 indexed receiptIndex,
         string receiptHash,
         uint256 timestamp
     );
@@ -39,7 +41,6 @@ contract ProofRegistry is IProofRegistry {
 
     constructor(address _verifier) {
         require(_verifier != address(0), "Invalid verifier");
-
         owner = msg.sender;
         verifier = _verifier;
     }
@@ -51,37 +52,52 @@ contract ProofRegistry is IProofRegistry {
     ) external override onlyVerifier returns (bool) {
         require(_taskId != 0, "Invalid task ID");
         require(bytes(_receiptHash).length > 0, "Empty receipt hash");
-        require(receipts[_taskId].timestamp == 0, "Receipt already exists");
 
-        receipts[_taskId] = Receipt({
-            receiptHash: _receiptHash,
-            signature: _signature,
-            verified: true,
-            timestamp: block.timestamp
-        });
-
-        emit ReceiptRegistered(
-            _taskId,
-            _receiptHash,
-            block.timestamp
+        receipts[_taskId].push(
+            Receipt({
+                receiptHash: _receiptHash,
+                signature: _signature,
+                verified: true,
+                timestamp: block.timestamp
+            })
         );
 
+        uint256 index = receipts[_taskId].length - 1;
+        emit ReceiptRegistered(_taskId, index, _receiptHash, block.timestamp);
         return true;
     }
 
-    function verifyReceipt(
-        uint256 _taskId
-    ) external view override returns (bool) {
-        return receipts[_taskId].verified;
+    /// @notice True if the latest receipt for the task is verified
+    function verifyReceipt(uint256 _taskId)
+        external
+        view
+        override
+        returns (bool)
+    {
+        Receipt[] storage list = receipts[_taskId];
+        if (list.length == 0) return false;
+        return list[list.length - 1].verified;
+    }
+
+    function getReceiptCount(uint256 _taskId) external view returns (uint256) {
+        return receipts[_taskId].length;
+    }
+
+    function getLatestReceipt(uint256 _taskId)
+        external
+        view
+        returns (string memory receiptHash, bool verified, uint256 timestamp)
+    {
+        Receipt[] storage list = receipts[_taskId];
+        require(list.length > 0, "No receipts");
+        Receipt storage r = list[list.length - 1];
+        return (r.receiptHash, r.verified, r.timestamp);
     }
 
     function setVerifier(address _newVerifier) external onlyOwner {
         require(_newVerifier != address(0), "Invalid verifier");
-
         address oldVerifier = verifier;
         verifier = _newVerifier;
-
         emit VerifierUpdated(oldVerifier, _newVerifier);
     }
 }
-
