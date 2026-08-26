@@ -4,9 +4,18 @@ import subprocess
 import sys
 
 
+# =========================================================
+# PATHS
+# =========================================================
+
 TEST_CASES_FILE = "/workspace/test-data/test_cases.json"
 RUNNER_FILE = "/workspace/runner/run.py"
+RESULT_FILE = "/workspace/test-data/result.json"
 
+
+# =========================================================
+# LOAD TEST CASES
+# =========================================================
 
 def load_test_cases():
 
@@ -37,6 +46,10 @@ def load_test_cases():
 
     return test_cases
 
+
+# =========================================================
+# RUN ONE TEST
+# =========================================================
 
 def run_test(test_case):
 
@@ -70,7 +83,6 @@ def run_test(test_case):
     print(f"Input: {test_input}")
     print(f"Expected: {expected_output}")
 
-    # Send test case to run.py
     test_data = json.dumps({
         "input": test_input,
         "expected_output": expected_output
@@ -97,16 +109,16 @@ def run_test(test_case):
             "status": "ERROR"
         }
 
-    # Display runner output
     if result.stdout:
+
         print("\nRunner output:")
         print(result.stdout)
 
     if result.stderr:
+
         print("\nRunner errors:")
         print(result.stderr)
 
-    # Determine result
     if result.returncode == 0:
 
         status = "PASS"
@@ -123,15 +135,19 @@ def run_test(test_case):
     }
 
 
+# =========================================================
+# MAIN
+# =========================================================
+
 def main():
 
     print("=" * 60)
     print("             PROGRAM TESTER")
     print("=" * 60)
 
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
     # Load test cases
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
 
     try:
 
@@ -149,9 +165,9 @@ def main():
         f"\nLoaded {len(test_cases)} test cases."
     )
 
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
     # Run tests
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
 
     results = []
 
@@ -161,9 +177,9 @@ def main():
 
         results.append(result)
 
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
     # Calculate results
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
 
     total = len(results)
 
@@ -185,9 +201,60 @@ def main():
         if result["status"] == "ERROR"
     )
 
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
+    # Determine overall status
+    # -----------------------------------------------------
+
+    if errors > 0:
+
+        overall_status = "ERROR"
+
+    elif failed > 0:
+
+        overall_status = "FAILED"
+
+    else:
+
+        overall_status = "PASSED"
+
+    # -----------------------------------------------------
+    # Create machine-readable result
+    # -----------------------------------------------------
+
+    result_data = {
+        "status": overall_status,
+        "total_tests": total,
+        "passed_tests": passed,
+        "failed_tests": failed,
+        "error_tests": errors,
+        "tests": results
+    }
+
+    try:
+
+        with open(
+            RESULT_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                result_data,
+                file,
+                indent=2
+            )
+
+    except Exception as error:
+
+        print(
+            f"\nERROR writing result file: {error}"
+        )
+
+        sys.exit(1)
+
+    # -----------------------------------------------------
     # Final report
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
 
     print("\n\n")
     print("=" * 60)
@@ -201,9 +268,19 @@ def main():
 
     print("=" * 60)
 
-    # ---------------------------------------------------------
+    print(
+        f"Overall status: {overall_status}"
+    )
+
+    print(
+        f"Result file: {RESULT_FILE}"
+    )
+
+    print("=" * 60)
+
+    # -----------------------------------------------------
     # Exit status
-    # ---------------------------------------------------------
+    # -----------------------------------------------------
 
     if failed > 0 or errors > 0:
 
