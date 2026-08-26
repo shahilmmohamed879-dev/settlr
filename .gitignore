@@ -8,3 +8,8 @@ contracts/out/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Floor 4 generated files
+44/program-tester/test-data/output.txt
+
+44/program-tester/test-data/receipt.json

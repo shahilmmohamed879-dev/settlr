@@ -11,4 +11,8 @@ RUN apt-get update && \
     default-jdk \
     && rm -rf /var/lib/apt/lists/*
 
-CMD ["python3", "/workspace/runner/test_manager.py"]
+COPY requirements.txt /workspace/requirements.txt
+
+RUN pip install --no-cache-dir -r /workspace/requirements.txt
+
+CMD ["python3", "/workspace/runner/test_manager.py"]	

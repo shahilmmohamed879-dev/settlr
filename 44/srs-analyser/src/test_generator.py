@@ -1,21 +1,38 @@
 import os
-import json
-
 from dotenv import load_dotenv
 from google import genai
 from pydantic import BaseModel
 
 
-load_dotenv()
+# ============================================================
+# LOAD ENVIRONMENT
+# ============================================================
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+ANALYSER_DIR = os.path.dirname(CURRENT_DIR)
+ENV_FILE = os.path.join(ANALYSER_DIR, ".env")
+
+load_dotenv(ENV_FILE)
 
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 if not API_KEY:
-    raise ValueError("GEMINI_API_KEY not found in .env")
+    raise RuntimeError(
+        f"GEMINI_API_KEY not found.\n"
+        f"Expected .env file at:\n{ENV_FILE}"
+    )
 
+
+# ============================================================
+# GEMINI CLIENT
+# ============================================================
 
 client = genai.Client(api_key=API_KEY)
 
+
+# ============================================================
+# RESPONSE SCHEMA
+# ============================================================
 
 class TestCase(BaseModel):
     id: str
@@ -30,34 +47,54 @@ class TestCaseList(BaseModel):
     test_cases: list[TestCase]
 
 
-def generate_test_cases(srs_text):
+# ============================================================
+# GENERATE TEST CASES
+# ============================================================
+
+def generate_test_cases(srs_text: str) -> TestCaseList:
+
+    if not srs_text.strip():
+        raise ValueError("SRS text is empty.")
 
     prompt = f"""
-You are a software testing expert.
+You are the automated testing engine for the SETTLR platform.
 
-Analyze the following Software Requirements Specification (SRS).
+Read the following Software Requirements Specification.
 
-Identify the functional requirements and generate useful test cases
-for each requirement.
+Your job is to generate executable-oriented test cases from ONLY
+the requirements explicitly present in the SRS.
 
-Include, where applicable:
+Do NOT invent functionality.
+
+For every relevant functional requirement, generate appropriate:
+
 - Positive test cases
 - Negative test cases
 - Boundary cases
 - Edge cases
 - Invalid input cases
 
-Do NOT invent requirements that are not present in the SRS.
+Each test case MUST contain:
 
-Each test case must contain:
-- A unique ID
-- The requirement it tests
-- Test type
-- Description
-- Input
-- Expected output
+- id
+- requirement_id
+- test_type
+- description
+- input
+- expected_output
 
-SRS DOCUMENT:
+Rules:
+
+1. IDs must be unique.
+2. requirement_id must identify the requirement being tested.
+3. expected_output must be concrete and testable.
+4. Do not add explanations outside the JSON structure.
+5. Do not invent requirements.
+6. Prefer deterministic inputs and outputs.
+7. Generate enough tests to meaningfully cover the SRS.
+
+SRS DOCUMENT
+============
 
 {srs_text}
 """
@@ -70,5 +107,10 @@ SRS DOCUMENT:
             "response_schema": TestCaseList,
         },
     )
+
+    if response.parsed is None:
+        raise RuntimeError(
+            "Gemini returned no structured test-case response."
+        )
 
     return response.parsed

@@ -84,39 +84,60 @@ contract IntegrationTest is Test {
     bytes32 constant SUBMISSION_HASH =
         keccak256("QmDeliveryHash");
 
+    // Module 4 verification receipt
+    string constant RECEIPT_HASH =
+        "34eda0f3390da573ed9c071c401346b39675b070f2feae55fe271ef692de276b";
+
     function setUp() public {
-        // Deploy mock token
+        // =========================================================
+        // DEPLOY MOCK TOKEN
+        // =========================================================
+
         token = new IntegrationMockUSDC();
 
-        // Deploy proof registry
+        // =========================================================
+        // DEPLOY PROOF REGISTRY
+        // =========================================================
+
         vm.prank(owner);
 
         proofRegistry = new ProofRegistry(
             address(this)
         );
 
-        // Deploy escrow
+        // =========================================================
+        // DEPLOY ESCROW
+        // =========================================================
+
         escrow = new SettlrEscrow(
             address(token),
             address(proofRegistry)
         );
 
-        // Deploy Floor 2 TaskMarket
+        // =========================================================
+        // DEPLOY FLOOR 2 TASK MARKET
+        // =========================================================
+
         market = new TaskMarket();
 
-        // Give client USDC
+        // =========================================================
+        // FUND USERS
+        // =========================================================
+
         token.mint(
             client,
             100_000e6
         );
 
-        // Give freelancer USDC
         token.mint(
             freelancer,
             100_000e6
         );
 
-        // Client approves escrow
+        // =========================================================
+        // CLIENT APPROVES ESCROW
+        // =========================================================
+
         vm.prank(client);
 
         token.approve(
@@ -124,7 +145,10 @@ contract IntegrationTest is Test {
             type(uint256).max
         );
 
-        // Freelancer approves escrow
+        // =========================================================
+        // FREELANCER APPROVES ESCROW
+        // =========================================================
+
         vm.prank(freelancer);
 
         token.approve(
@@ -132,13 +156,15 @@ contract IntegrationTest is Test {
             type(uint256).max
         );
 
-        // Give client ETH for TaskMarket reward
+        // =========================================================
+        // GIVE USERS ETH
+        // =========================================================
+
         vm.deal(
             client,
             10 ether
         );
 
-        // Give freelancer ETH for testing
         vm.deal(
             freelancer,
             10 ether
@@ -372,23 +398,41 @@ contract IntegrationTest is Test {
         );
 
         // =========================================================
-        // 10. PROOF REGISTRY VERIFICATION
+        // 10. MODULE 4 → PROOF REGISTRY
         // =========================================================
+        //
+        // Module 4 generated:
+        //
+        // Total tests : 19
+        // Passed      : 19
+        // Failed      : 0
+        // Errors      : 0
+        // Status      : PASSED
+        //
+        // Receipt hash:
+        // 34eda0f3390da573ed9c071c401346b39675b070f2feae55fe271ef692de276b
+        //
+        // The current ProofRegistry uses an authorized verifier.
+        // address(this) is the verifier in this integration test.
 
         vm.prank(address(this));
 
         proofRegistry.registerReceipt(
             1,
-            "QmReceiptHash",
+            RECEIPT_HASH,
             hex"1234"
         );
+
+        // =========================================================
+        // 11. VERIFY MODULE 4 RECEIPT
+        // =========================================================
 
         assertTrue(
             proofRegistry.verifyReceipt(1)
         );
 
         // =========================================================
-        // 11. CLIENT RELEASES PAYMENT
+        // 12. CLIENT RELEASES PAYMENT
         // =========================================================
 
         uint256 freelancerBefore =
@@ -406,6 +450,7 @@ contract IntegrationTest is Test {
         // Payment = 100%
         // Bond = 20%
         // Total returned = 120%
+
         uint256 expected =
             BUDGET +
             (BUDGET * 2_000 / 10_000);
@@ -416,7 +461,7 @@ contract IntegrationTest is Test {
         );
 
         // =========================================================
-        // 12. VERIFY ESCROW COMPLETED
+        // 13. VERIFY ESCROW COMPLETED
         // =========================================================
 
         SettlrEscrow.EscrowTask memory escrowTask =
@@ -438,5 +483,21 @@ contract IntegrationTest is Test {
             escrowTask.deliveryHash,
             "QmDeliveryHash"
         );
+
+        // =========================================================
+        // FINAL INTEGRATION ASSERTIONS
+        // =========================================================
+
+        // Module 4 receipt exists and is verified.
+        assertTrue(
+            proofRegistry.verifyReceipt(1)
+        );
+
+        // Receipt hash stored by ProofRegistry must match
+        // the hash generated by Module 4.
+        //
+        // ProofRegistry does not currently expose the stored
+        // receipt hash, so verification above is the on-chain
+        // acceptance check.
     }
 }

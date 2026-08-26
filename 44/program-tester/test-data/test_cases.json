@@ -3,121 +3,153 @@
     {
       "id": "TC-001",
       "requirement_id": "FR-003",
-      "test_type": "Boundary Case",
-      "description": "Verify grade A output for upper boundary value 100.",
+      "test_type": "boundary",
+      "description": "Test upper boundary mark 100 for Grade A",
       "input": "100",
       "expected_output": "A"
     },
     {
       "id": "TC-002",
       "requirement_id": "FR-003",
-      "test_type": "Boundary Case",
-      "description": "Verify grade A output for lower boundary value 90.",
-      "input": "90",
+      "test_type": "positive",
+      "description": "Test middle range mark 95 for Grade A",
+      "input": "95",
       "expected_output": "A"
     },
     {
       "id": "TC-003",
       "requirement_id": "FR-003",
-      "test_type": "Positive Case",
-      "description": "Verify grade A output for middle value 95.",
-      "input": "95",
+      "test_type": "boundary",
+      "description": "Test lower boundary mark 90 for Grade A",
+      "input": "90",
       "expected_output": "A"
     },
     {
       "id": "TC-004",
       "requirement_id": "FR-004",
-      "test_type": "Boundary Case",
-      "description": "Verify grade B output for upper boundary value 89.",
+      "test_type": "boundary",
+      "description": "Test upper boundary mark 89 for Grade B",
       "input": "89",
       "expected_output": "B"
     },
     {
       "id": "TC-005",
       "requirement_id": "FR-004",
-      "test_type": "Boundary Case",
-      "description": "Verify grade B output for lower boundary value 80.",
-      "input": "80",
+      "test_type": "positive",
+      "description": "Test middle range mark 85 for Grade B",
+      "input": "85",
       "expected_output": "B"
     },
     {
       "id": "TC-006",
-      "requirement_id": "FR-005",
-      "test_type": "Boundary Case",
-      "description": "Verify grade C output for upper boundary value 79.",
-      "input": "79",
-      "expected_output": "C"
+      "requirement_id": "FR-004",
+      "test_type": "boundary",
+      "description": "Test lower boundary mark 80 for Grade B",
+      "input": "80",
+      "expected_output": "B"
     },
     {
       "id": "TC-007",
       "requirement_id": "FR-005",
-      "test_type": "Boundary Case",
-      "description": "Verify grade C output for lower boundary value 70.",
-      "input": "70",
+      "test_type": "boundary",
+      "description": "Test upper boundary mark 79 for Grade C",
+      "input": "79",
       "expected_output": "C"
     },
     {
       "id": "TC-008",
+      "requirement_id": "FR-005",
+      "test_type": "positive",
+      "description": "Test middle range mark 75 for Grade C",
+      "input": "75",
+      "expected_output": "C"
+    },
+    {
+      "id": "TC-009",
+      "requirement_id": "FR-005",
+      "test_type": "boundary",
+      "description": "Test lower boundary mark 70 for Grade C",
+      "input": "70",
+      "expected_output": "C"
+    },
+    {
+      "id": "TC-010",
       "requirement_id": "FR-006",
-      "test_type": "Boundary Case",
-      "description": "Verify grade D output for upper boundary value 69.",
+      "test_type": "boundary",
+      "description": "Test upper boundary mark 69 for Grade D",
       "input": "69",
       "expected_output": "D"
     },
     {
-      "id": "TC-009",
+      "id": "TC-011",
       "requirement_id": "FR-006",
-      "test_type": "Boundary Case",
-      "description": "Verify grade D output for lower boundary value 60.",
+      "test_type": "positive",
+      "description": "Test middle range mark 65 for Grade D",
+      "input": "65",
+      "expected_output": "D"
+    },
+    {
+      "id": "TC-012",
+      "requirement_id": "FR-006",
+      "test_type": "boundary",
+      "description": "Test lower boundary mark 60 for Grade D",
       "input": "60",
       "expected_output": "D"
     },
     {
-      "id": "TC-010",
+      "id": "TC-013",
       "requirement_id": "FR-007",
-      "test_type": "Boundary Case",
-      "description": "Verify grade F output for upper boundary value 59.",
+      "test_type": "boundary",
+      "description": "Test upper boundary mark 59 for Grade F",
       "input": "59",
       "expected_output": "F"
     },
     {
-      "id": "TC-011",
+      "id": "TC-014",
       "requirement_id": "FR-007",
-      "test_type": "Boundary Case",
-      "description": "Verify grade F output for lower boundary value 0.",
+      "test_type": "positive",
+      "description": "Test middle range mark 45 for Grade F",
+      "input": "45",
+      "expected_output": "F"
+    },
+    {
+      "id": "TC-015",
+      "requirement_id": "FR-007",
+      "test_type": "boundary",
+      "description": "Test lower boundary mark 0 for Grade F",
       "input": "0",
       "expected_output": "F"
     },
     {
-      "id": "TC-012",
+      "id": "TC-016",
       "requirement_id": "FR-008",
-      "test_type": "Boundary Case / Negative",
-      "description": "Verify output for value just below valid range (-1).",
+      "test_type": "boundary",
+      "description": "Test mark just below minimum valid range",
       "input": "-1",
       "expected_output": "Invalid mark"
     },
     {
-      "id": "TC-013",
+      "id": "TC-017",
       "requirement_id": "FR-008",
-      "test_type": "Boundary Case / Negative",
-      "description": "Verify output for value just above valid range (101).",
+      "test_type": "boundary",
+      "description": "Test mark just above maximum valid range",
       "input": "101",
       "expected_output": "Invalid mark"
     },
     {
-      "id": "TC-014",
+      "id": "TC-018",
       "requirement_id": "FR-008",
-      "test_type": "Negative Case",
-      "description": "Verify output for negative number (-50).",
-      "input": "-50",
+      "test_type": "edge",
+      "description": "Test large negative mark input",
+      "input": "-100",
       "expected_output": "Invalid mark"
     },
     {
-      "id": "TC-015",
+      "id": "TC-019",
       "requirement_id": "FR-008",
-      "test_type": "Negative Case",
-      "description": "Verify output for number significantly higher than 100 (150).",
-      "input": "150",
+      "test_type": "edge",
+      "description": "Test large positive mark input",
+      "input": "500",
       "expected_output": "Invalid mark"
     }
   ]

@@ -2,9 +2,12 @@ services:
   program-tester:
     build:
       context: ..
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.txt
 
     working_dir: /workspace
+
+    environment:
+      TASK_ID: ${TASK_ID:-0}
 
     volumes:
       - ../program:/workspace/program
@@ -12,4 +15,3 @@ services:
       - ../runner:/workspace/runner
 
     command: python3 /workspace/runner/test_manager.py
-    
