@@ -1,0 +1,5 @@
+the srs document needs to be in a pdf 
+excute the main.py file in "44\srs-analyser\src\main.py"
+the test case will be generated in "44\program-tester\test-data"
+after that paste the program file in "44\program-tester\program"
+go to cd "44\program-tester" and run docker compose -f docker/docker-compose.yml run --rm program-tester

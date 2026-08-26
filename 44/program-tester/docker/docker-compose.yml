@@ -1,0 +1,15 @@
+services:
+  program-tester:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+
+    working_dir: /workspace
+
+    volumes:
+      - ../program:/workspace/program
+      - ../test-data:/workspace/test-data
+      - ../runner:/workspace/runner
+
+    command: python3 /workspace/runner/test_manager.py
+    
