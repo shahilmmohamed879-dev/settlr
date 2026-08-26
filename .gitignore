@@ -1,0 +1,10 @@
+# Foundry build artifacts
+contracts/cache/
+contracts/out/
+
+# OS / editor files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
