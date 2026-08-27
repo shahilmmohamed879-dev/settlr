@@ -1,54 +1,62 @@
 ```
-# Environment variables
-.env
-
-# Solidity build artifacts
-contracts/out/
+# Build artifacts and cache
+contracts/build/
 contracts/cache/
 
-# Dependencies
+# Broadcast logs
+contracts/broadcast/
+
+# Dependency directories
 node_modules/
+lib/
+forge-std/
 
 # Logs
 *.log
 
+# Environment
+.env
+.env.local
+*.env.*
+
 # Editor/IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# System files
+# OS
 .DS_Store
 Thumbs.db
 
-# Coverage reports
+# Coverage
 coverage/
 htmlcov/
 .coverage
 
-# Python
+# Python (if applicable)
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
-env/
-venv/
-.venv/
-.ENV
-.venv.bak/
-.python-version
-
-# Build directories
-build/
+*.so
+*.egg-info/
+.eggs/
 dist/
-target/
+build/
+*.egg
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.swp
-*.swo
+# Compiled files
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.dylib
+*.so
+*.exe
+*.out
 
 # Compressed files
 *.zip
@@ -73,9 +81,4 @@ target/
 *.tar.bz2
 *.tar.xz
 *.tar.zst
-
-# Cache directories
-.mypy_cache/
-.pytest_cache/
-.gradle/
 ```
