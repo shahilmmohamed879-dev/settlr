@@ -1,0 +1,46 @@
+services:
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:stable
+    working_dir: /workspace/contracts
+
+    entrypoint: ["/usr/local/bin/anvil"]
+
+    command:
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8545"
+      - "--chain-id"
+      - "31337"
+      - "--mnemonic"
+      - "test test test test test test test test test test test junk"
+
+    ports:
+      - "8545:8545"
+
+    volumes:
+      - .:/workspace
+
+  settlr-foundry:
+    image: ghcr.io/foundry-rs/foundry:stable
+    working_dir: /workspace/contracts
+
+    entrypoint: ["/usr/local/bin/forge"]
+
+    environment:
+      GIT_CONFIG_COUNT: "4"
+
+      GIT_CONFIG_KEY_0: "safe.directory"
+      GIT_CONFIG_VALUE_0: "/workspace/contracts"
+
+      GIT_CONFIG_KEY_1: "safe.directory"
+      GIT_CONFIG_VALUE_1: "/workspace/contracts/lib/forge-std"
+
+      GIT_CONFIG_KEY_2: "safe.directory"
+      GIT_CONFIG_VALUE_2: "/workspace/contracts/lib/openzeppelin-contracts"
+
+      GIT_CONFIG_KEY_3: "safe.directory"
+      GIT_CONFIG_VALUE_3: "/workspace/contracts/lib/openzeppelin-contracts/lib/forge-std"
+
+    volumes:
+      - .:/workspace
